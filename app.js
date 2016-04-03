@@ -1,24 +1,29 @@
 var express = require('express');
-var auth = require('http-auth');
+var db = require('./db')();
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var app = express();
 
-var authMiddleware = auth.connect(auth.basic({
-	realm: 'SUPER SECRET STUFF'
-}, function (username, password, callback) {
-	callback(username == 'admin' && password == 'password');
-}));
-
-app.enable('trust proxy');
+app.enable('trust proxy', 1);
 app.locals.pretty = true;
 app.set('view engine', 'jade');
 app.use(express.static('public'));
 
+app.use(session({
+	name: 'session',
+	secret: 'foo',
+	resave: false,
+	saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: db })
+}));
+
 app.get('/', function (req, res) {
-	res.render('index', { title: 'localdns.in', ip: req.connection.remoteAddress });
+	//req.session.user = 'Demo';
+	res.render('index', { title: 'localdns.in', ip: req.connection.remoteAddress, user: req.session.user });
 });
 
-app.get('/secret', authMiddleware, function (req, res) {
-    res.send('Authenticated');
+app.get('/login', function (req, res) {
+    res.redirect('/');
 });
 
 module.exports = app;
