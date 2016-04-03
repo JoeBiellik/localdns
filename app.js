@@ -4,7 +4,7 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var app = express();
 
-app.enable('trust proxy', 1);
+app.set('trust proxy', 1);
 app.locals.pretty = true;
 app.set('view engine', 'jade');
 app.use(express.static('public'));
