@@ -5,6 +5,8 @@ var User = require('./models/user');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var app = express();
+var pages = require('./controllers/page');
+var users = require('./controllers/user');
 
 app.set('trust proxy', 1);
 app.set('view engine', 'jade');
@@ -31,25 +33,10 @@ app.use(function (req, res, next) {
 	next();
 });
 
-app.get('/', function (req, res) {
-	// req.session.email = 'mat.lomax@gmail.com';
-	// req.session.loggedIn = true;
-	res.render('index', { title: 'localdns.in', user: req.session.user });
-});
-
-app.get('/register', function (req, res) {
-    res.render('register', { title: 'Register' });
-});
-
-app.get('/about', function (req, res) {
-    res.render('about', { title: 'About' });
-});
-
-app.get('/login', function (req, res) {
-
-
-    res.render('login', { title: 'Login' });
-});
+app.get('/', pages.home);
+app.get('/about', pages.about);
+app.get('/register', users.register);
+app.get('/login', users.login);
 
 app.post('/update', function (req, res) {
 	var email = req.session.email;
