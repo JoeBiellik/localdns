@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  main.container.m-t-2.m-x-6
+    header.m-b-2
+      nav
+        ul.nav.nav-pills.pull-xs-right
+          li.nav-item
+            a(href='/').nav-link Home
+          li.nav-item
+            a(href='/login').nav-link Login
+          li.nav-item
+            a(href='/about').nav-link About
+
+      h1.text-muted.m-b-2 #{domain}
+
+    section.jumbotron.p-a-3
+      form.text-md-left
+        div.form-group
+          input(type='email', placeholder='Email Address', required, autofocus)#inputEmail.form-control.form-control-lg
+        div.form-group
+          input(type='password', placeholder='Password', required)#inputPassword.form-control.form-control-lg
+        div.form-group
+          input(type='password', placeholder='Password Confirm', required)#inputPasswordConfirm.form-control.form-control-lg
+        div.form-group.input-group.input-group-lg
+          input(type='text', placeholder='Subdomain', title='Lowercase letters, numbers and dashes (-)', pattern='([a-z0-9-])+', required)#inputSubdomain.form-control.form-control-lg
+          span.input-group-addon .#{domain}
+
+        button(type='submit').btn.btn-lg.btn-primary.btn-block Register
