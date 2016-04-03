@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 
 var user = new mongoose.Schema({
-	name: { type: String },
-	sub: { type: String },
-	ip: { type: String }
+	name: { type: String, unique: true },
+	sub: { type: String, unique: true },
+	ip: { type: String, unique: true }
 }, {
 	timestamps: true
 });
