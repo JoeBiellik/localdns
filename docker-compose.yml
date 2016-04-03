@@ -27,8 +27,8 @@ services:
      - 53
      - 53/udp
     ports:
-     - "5353:53"
-     - "5353:53/udp"
+     - "53:53"
+     - "53:53/udp"
   db:
     image: mongo:latest
     command: "--smallfiles"
