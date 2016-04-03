@@ -14,7 +14,7 @@ app.set('view engine', 'jade');
 app.use(express.static('public'));
 
 app.get('/', function (req, res) {
-	res.render('index', { title: 'localdns.in'});
+	res.render('index', { title: 'localdns.in', ip: req.connection.remoteAddress });
 });
 
 app.get('/secret', authMiddleware, function (req, res) {
