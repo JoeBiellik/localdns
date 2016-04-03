@@ -1,19 +1,14 @@
 extends layout
 
+block nav
+  li.nav-item
+    a(href='/').nav-link Home
+  li.nav-item
+    a(href='/login').nav-link Login
+  li.nav-item.active
+    a(href='/about').nav-link About
+
 block content
-  main.container.m-t-2.m-x-6
-    header.m-b-2
-      nav
-        ul.nav.nav-pills.pull-xs-right
-          li.nav-item
-            a(href='/').nav-link Home
-          li.nav-item
-            a(href='/login').nav-link Login
-          li.nav-item.active
-            a(href='/about').nav-link About
-
-      h1.text-muted.m-b-2 #{domain}
-
-    section
-      h3 About
-      p Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.
+  section
+    h3 About
+    p Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.

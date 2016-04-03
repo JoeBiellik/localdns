@@ -1,36 +1,31 @@
 extends layout
 
+block nav
+ li.nav-item.active
+    a(href='/').nav-link Home
+  li.nav-item
+    a(href='/login').nav-link Login
+  li.nav-item
+    a(href='/about').nav-link About
+
 block content
-  main.container.m-t-2.m-x-6
-    header.m-b-2
-      nav
-        ul.nav.nav-pills.pull-xs-right
-          li.nav-item.active
-            a(href='/').nav-link Home
-          li.nav-item
-            a(href='/login').nav-link Login
-          li.nav-item
-            a(href='/about').nav-link About
+  section.jumbotron.p-y-2
+    h2.display-4.p-y-2 Simple Dynamic DNS
+    p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+    p
+      a(href='/register').btn.btn-lg.btn-success.text-center.m-t-1 Sign up now
 
-      h1.text-muted.m-b-2 #{domain}
+  section.row.details
+    div.col-lg-6
+      h4 Free Service
+      p Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.
 
-    section.jumbotron.p-y-2
-      h2.display-4.p-y-2 Simple Dynamic DNS
-      p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-      p
-        a(href='/register').btn.btn-lg.btn-success.text-center.m-t-1 Sign up now
+      h4 Cross Platform
+      p Deploy with Docker or Vagrant for out the box setup or use anywhere Node.js runs.
 
-    section.row.details
-      div.col-lg-6
-        h4 Free Service
-        p Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.
+    div.col-lg-6
+      h4 Tiny and Simple
+      p With no external software, ...
 
-        h4 Cross Platform
-        p Deploy with Docker or Vagrant for out the box setup or use anywhere Node.js runs.
-
-      div.col-lg-6
-        h4 Tiny and Simple
-        p With no external software, ...
-
-        h4 100% Open Source
-        p Built using open source tools, you can easily customize and run your own service.
+      h4 100% Open Source
+      p Built using open source tools, you can easily customize and run your own service.
