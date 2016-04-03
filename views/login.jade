@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  main.container.m-t-2.m-x-6
+    header.m-b-2
+      nav
+        ul.nav.nav-pills.pull-xs-right
+          li.nav-item
+            a(href='/').nav-link Home
+          li.nav-item
+            a(href='/register').nav-link Register
+          li.nav-item
+            a(href='/about').nav-link About
+
+      h1.text-muted.m-b-2 #{domain}
+
+    section.jumbotron.p-a-3
+      form.text-md-left
+        div.form-group
+          input(type='email', placeholder='Email Address', required, autofocus)#inputEmail.form-control
+        div.form-group
+          input(type='password', placeholder='Password', required)#inputPassword.form-control
+
+        button(type='submit').btn.btn-lg.btn-primary.btn-block Login

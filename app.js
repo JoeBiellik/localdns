@@ -34,7 +34,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/login', function (req, res) {
-    res.redirect('/');
+    res.render('login', { title: 'Login' });
 });
 
 module.exports = app;

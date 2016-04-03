@@ -1,29 +1,24 @@
 extends layout
 
-block head
-  link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans:400,300')
 block content
   main.container.m-t-2.m-x-6
     header.m-b-2
       nav
         ul.nav.nav-pills.pull-xs-right
           li.nav-item.active
-            a(href='#').nav-link Home
+            a(href='/').nav-link Home
           li.nav-item
-            a(href='#').nav-link Login
+            a(href='/login').nav-link Login
           li.nav-item
-            a(href='#').nav-link About
+            a(href='/about').nav-link About
 
       h1.text-muted.m-b-2 #{domain}
-
-    a(href='https://github.com/JoeBiellik/dynamicdns')
-      img(style='position: absolute; top: 0; right: 0; border: 0;', src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png', alt='Fork me on GitHub')
 
     section.jumbotron.p-y-2
       h2.display-4.p-y-2 Simple Dynamic DNS
       p.lead Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
       p
-        a(href='#').btn.btn-lg.btn-success.text-center.m-t-1 Sign up now
+        a(href='/register').btn.btn-lg.btn-success.text-center.m-t-1 Sign up now
 
     section.row.details
       div.col-lg-6
@@ -39,6 +34,3 @@ block content
 
         h4 100% Open Source
         p Built using open source tools, you can easily customize and run your own service.
-
-  script(src='https://code.jquery.com/jquery-2.2.2.min.js')
-  script(src='/main.js')
