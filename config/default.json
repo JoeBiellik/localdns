@@ -6,7 +6,7 @@
     "host": "0.0.0.0",
     "port": 53
   },
-  "subdomainBlacklist": {
+  "subdomainBlacklist": [
     "www",
     "admin",
     "mail",
@@ -20,5 +20,5 @@
     "img",
     "host",
     "db"
-  }
+  ]
 }
