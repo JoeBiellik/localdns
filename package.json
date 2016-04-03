@@ -22,6 +22,7 @@
     "lint": "./node_modules/.bin/eslint . && ./node_modules/.bin/jade-lint ./views/"
   },
   "dependencies": {
+    "body-parser": "^1.15.0",
     "config": "^1.16.0",
     "connect-mongo": "^1.1.0",
     "dnsd": "^0.9.6",

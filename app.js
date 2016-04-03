@@ -14,6 +14,8 @@ app.locals.domain = config.domain;
 
 app.use(express.static('public'));
 
+app.use(require('body-parser').urlencoded({ extended: false }));
+
 app.use(session({
 	name: 'session',
 	secret: 'foo',
@@ -35,10 +37,6 @@ app.get('/', function (req, res) {
 	res.render('index', { title: 'localdns.in', user: req.session.user });
 });
 
-app.get('/login', function (req, res) {
-    res.render('login', { title: 'Login' });
-});
-
 app.get('/register', function (req, res) {
     res.render('register', { title: 'Register' });
 });
@@ -47,17 +45,32 @@ app.get('/about', function (req, res) {
     res.render('about', { title: 'About' });
 });
 
-app.get('/update', function (req, res) {
+app.get('/login', function (req, res) {
+
+
+    res.render('login', { title: 'Login' });
+});
+
+app.post('/update', function (req, res) {
+	var email = req.session.email;
     if (!res.locals.loggedIn) {
-		res.sendStatus(403);
-		return res.end();
+		if (req.body.email) {
+			email = req.body.email;
+		} else {
+			res.sendStatus(403);
+			return res.end();
+		}
 	}
 
-	var user = User.findOne({ email: req.session.email }, function (err, doc) {
+	var user = User.findOne({ email: email }, function (err, doc) {
 		if (!err && doc) {
-			doc.ip = res.locals.ip;
-			doc.save();
-			res.sendStatus(204);
+			if (res.locals.loggedIn || doc.verifyPasswordSync(req.body.password)) {
+				doc.ip = req.body.ip || res.locals.ip;
+				doc.save();
+				res.sendStatus(204);
+			} else {
+				res.sendStatus(403);
+			}
 		} else {
 			res.sendStatus(404);
 		}
