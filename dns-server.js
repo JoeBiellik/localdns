@@ -16,6 +16,7 @@ var server = dnsd.createServer(function(req, res) {
 	// 	email: 'mat.lomax@gmail.com',
 	// 	sub: 'mat',
 	// 	ip: '2.4.6.8',
+	// 	password: 'password'
 	// });
 	//
 	// u.save();
@@ -39,4 +40,4 @@ var server = dnsd.createServer(function(req, res) {
 	}
 });
 
-server.zone(config.domain, 'ns1.' + config.domain, 'us@' + config.domain, 'now', '2h', '30m', '2w', '10m').listen(process.env.PORT || config.dns.port, process.env.HOST || config.dns.host);
+server.zone(config.domain, 'ns1.' + config.domain, 'us@' + config.domain, 'now', '2h', '30m', '2w', '1m').listen(process.env.PORT || config.dns.port, process.env.HOST || config.dns.host);
