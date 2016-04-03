@@ -39,6 +39,14 @@ app.get('/login', function (req, res) {
     res.render('login', { title: 'Login' });
 });
 
+app.get('/register', function (req, res) {
+    res.render('register', { title: 'Register' });
+});
+
+app.get('/about', function (req, res) {
+    res.render('about', { title: 'About' });
+});
+
 app.get('/update', function (req, res) {
     if (!res.locals.loggedIn) {
 		res.sendStatus(403);
