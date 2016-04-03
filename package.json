@@ -25,6 +25,7 @@
     "config": "^1.16.0",
     "dnsd": "^0.9.6",
     "express": "^4.13.4",
+    "http-auth": "^2.2.9",
     "jade": "^1.11.0",
     "mongoose": "^4.1.12",
     "mongoose-bcrypt": "^1.2.3"
