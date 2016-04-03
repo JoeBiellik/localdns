@@ -1,7 +1,7 @@
 {
   "domain": "localdns.in",
   "port": 3000,
-  "db": "localhost/paste",
+  "db": "localhost/dns",
   "dns": {
     "host": "0.0.0.0",
     "port": 53
