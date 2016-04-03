@@ -3,7 +3,7 @@ var util = require('util');
 var mongoose = require('mongoose');
 
 module.exports = function () {
-	mongoose.connect(config.db); 
+	mongoose.connect(config.db);
 
 	mongoose.connection.once('open', function () {
 		util.log('MongoDB connection open');
