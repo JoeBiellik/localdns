@@ -1,7 +1,6 @@
 var express = require('express');
 var config = require('config');
 var db = require('./db')();
-var User = require('./models/user');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var app = express();
@@ -37,33 +36,6 @@ app.get('/', pages.home);
 app.get('/about', pages.about);
 app.get('/register', users.register);
 app.get('/login', users.login);
-
-app.post('/update', function (req, res) {
-	var email = req.session.email;
-    if (!res.locals.loggedIn) {
-		if (req.body.email) {
-			email = req.body.email;
-		} else {
-			res.sendStatus(403);
-			return res.end();
-		}
-	}
-
-	var user = User.findOne({ email: email }, function (err, doc) {
-		if (!err && doc) {
-			if (res.locals.loggedIn || doc.verifyPasswordSync(req.body.password)) {
-				doc.ip = req.body.ip || res.locals.ip;
-				doc.save();
-				res.sendStatus(204);
-			} else {
-				res.sendStatus(403);
-			}
-		} else {
-			res.sendStatus(404);
-		}
-
-		return res.end();
-	});
-});
+app.post('/update', users.update);
 
 module.exports = app;
