@@ -8,6 +8,8 @@ var authMiddleware = auth.connect(auth.basic({
 	callback(username == 'admin' && password == 'password');
 }));
 
+app.enable('trust proxy');
+app.locals.pretty = true;
 app.set('view engine', 'jade');
 app.use(express.static('public'));
 
