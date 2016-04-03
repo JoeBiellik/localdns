@@ -10,10 +10,9 @@ var authMiddleware = auth.connect(auth.basic({
 
 app.set('view engine', 'jade');
 app.use(express.static('public'));
-app.enable('trust proxy');
 
 app.get('/', function (req, res) {
-	res.render('index', { title: 'Test', text: 'Hello World!'});
+	res.render('index', { title: 'localdns.in'});
 });
 
 app.get('/secret', authMiddleware, function (req, res) {
