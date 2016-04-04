@@ -31,6 +31,21 @@ users.setSession = function(req, u) {
 };
 
 users.registerPost = function(req, res) {
+	var errors = {};
+
+	if (req.body.password !== req.body.password_confirm) {
+		errors.password_confirm = 'Passwords do not match';
+	}
+
+	if (Object.keys(errors).length) {
+		res.locals.body = {
+			email: req.body.email,
+			sub: req.body.sub,
+		};
+		res.locals.errors = errors;
+		return users.register(req, res);
+	}
+
 	var u = new User({
 		email: req.body.email,
 		sub: req.body.sub,
