@@ -38,6 +38,7 @@ app.get('/about', pages.about);
 app.get('/register', users.register);
 app.get('/login', users.login);
 app.post('/login', users.loginPost);
+app.get('/logout', users.logout);
 app.post('/update', users.update);
 
 module.exports = app;

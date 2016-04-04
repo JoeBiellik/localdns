@@ -4,7 +4,7 @@ var User = require('../models/user');
 var user = {};
 
 user.checkSession = function(req) {
-	return (Boolean(req.session.user.email) && req.session.loggedIn);
+	return (Boolean(req.session.user) && Boolean(req.session.user.email) && req.session.loggedIn);
 };
 
 user.getUser = function(req, verify, callback) {
@@ -26,6 +26,22 @@ user.setSession = function(req, u) {
 		sub: u.sub,
 		ip: u.ip
 	};
+};
+
+user.registerPost = function(req, res) {
+	var u = new User({
+		email: req.body.email,
+		sub: req.body.sub,
+		ip: req.body.ip || res.locals.ip,
+		password: req.body.email
+	});
+
+	u.save();
+
+	req.session.loggedIn = true;
+	user.setSession(u);
+
+	return res.redirect('/');
 };
 
 user.register = function(req, res) {
@@ -52,6 +68,13 @@ user.login = function(req, res) {
 	} else {
 		res.render('login', { title: 'Login' });
 	}
+};
+
+user.logout = function(req, res) {
+	req.session.loggedIn = false;
+	req.session.user = null;
+
+	return res.redirect('/');
 };
 
 user.update = function(req, res) {
