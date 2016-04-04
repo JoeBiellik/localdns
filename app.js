@@ -27,7 +27,8 @@ app.use(session({
 
 app.use(function (req, res, next) {
 	res.locals.ip = req.connection.remoteAddress;
-	res.locals.loggedIn = req.session.loggedIn || false;
+	res.locals.loggedIn = users.checkSession(req);
+	res.locals.user = req.session.user;
 
 	next();
 });
@@ -36,6 +37,7 @@ app.get('/', pages.home);
 app.get('/about', pages.about);
 app.get('/register', users.register);
 app.get('/login', users.login);
+app.post('/login', users.loginPost);
 app.post('/update', users.update);
 
 module.exports = app;

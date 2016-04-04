@@ -10,10 +10,10 @@ block nav
 
 block content
   section.jumbotron.p-a-3
-    form.text-md-left
+    form(method='post', action='/login').text-md-left
       div.form-group
-        input(type='email', placeholder='Email Address', required, autofocus)#inputEmail.form-control.form-control-lg
+        input(type='email', placeholder='Email Address', name='email', required, autofocus)#inputEmail.form-control.form-control-lg
       div.form-group
-        input(type='password', placeholder='Password', required)#inputPassword.form-control.form-control-lg
+        input(type='password', placeholder='Password', name='password', required)#inputPassword.form-control.form-control-lg
 
       button(type='submit').btn.btn-lg.btn-primary.btn-block Login
