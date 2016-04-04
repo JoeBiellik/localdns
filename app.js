@@ -7,7 +7,6 @@ var app = express();
 var pages = require('./controllers/page');
 var users = require('./controllers/user');
 
-app.set('trust proxy', 1);
 app.set('view engine', 'jade');
 
 app.locals.pretty = true;
@@ -26,7 +25,7 @@ app.use(session({
 }));
 
 app.use(function (req, res, next) {
-	res.locals.ip = req.connection.remoteAddress;
+	res.locals.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	res.locals.loggedIn = users.checkSession(req);
 	res.locals.user = req.session.user;
 
