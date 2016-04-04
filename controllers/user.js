@@ -58,7 +58,7 @@ users.loginPost = function(req, res) {
 
 			return res.redirect('/');
 		} else {
-			res.locals.errors = { email: 'Email and password did not match' };
+			res.locals.errors = { _top: 'Email and password did not match' };
 			users.login(req, res);
 		}
 	});
