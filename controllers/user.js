@@ -1,18 +1,18 @@
 var db = require('../db')();
 var User = require('../models/user');
 
-var user = {};
+var users = {};
 
-user.checkSession = function(req) {
+users.checkSession = function(req) {
 	return (Boolean(req.session.user) && Boolean(req.session.user.email) && req.session.loggedIn);
 };
 
-user.getUser = function(req, verify, callback) {
-	var email = user.checkSession(req) ? req.session.user.email : req.body.email;
+users.getUser = function(req, verify, callback) {
+	var email = users.checkSession(req) ? req.session.user.email : req.body.email;
 	if (verify && (!req.body.email || !req.body.password)) callback(true);
 
 	User.findOne({ email: email }, function (err, doc) {
-		if (!err && doc && (!verify || user.checkSession(req) || doc.verifyPasswordSync(req.body.password))) {
+		if (!err && doc && (!verify || users.checkSession(req) || doc.verifyPasswordSync(req.body.password))) {
 			callback(false, doc);
 		} else {
 			callback(true);
@@ -20,7 +20,7 @@ user.getUser = function(req, verify, callback) {
 	});
 };
 
-user.setSession = function(req, u) {
+users.setSession = function(req, u) {
 	if (!u) return;
 
 	req.session.user = {
@@ -30,67 +30,73 @@ user.setSession = function(req, u) {
 	};
 };
 
-user.registerPost = function(req, res) {
+users.registerPost = function(req, res) {
 	var u = new User({
 		email: req.body.email,
 		sub: req.body.sub,
-		ip: req.body.ip || res.locals.ip,
+		ip: res.locals.ip,
 		password: req.body.password
 	});
 
-	// console.log(u);
-
 	u.save();
 
-	// console.log(u);
 	req.session.loggedIn = true;
-	user.setSession(req, u);
+	users.setSession(req, u);
 
 	return res.redirect('/');
 };
 
-user.register = function(req, res) {
+users.register = function(req, res) {
 	res.render('register', { title: 'Register' });
 };
 
-user.loginPost = function(req, res) {
-	user.getUser(req, true, function (err, u) {
+users.loginPost = function(req, res) {
+	users.getUser(req, true, function (err, u) {
 		if (!err && u) {
 			req.session.loggedIn = true;
-			user.setSession(req, u);
+			users.setSession(req, u);
 
 			return res.redirect('/');
 		} else {
-			res.locals.errors = [ 'Email and password did not match' ];
-			user.login(req, res);
+			res.locals.errors = { email: 'Email and password did not match' };
+			users.login(req, res);
 		}
 	});
 }
 
-user.login = function(req, res) {
-	if (user.checkSession(req)) {
+users.login = function(req, res) {
+	if (users.checkSession(req)) {
 		return res.redirect('/');
 	} else {
 		res.render('login', { title: 'Login' });
 	}
 };
 
-user.logout = function(req, res) {
+users.logout = function(req, res) {
 	req.session.loggedIn = false;
 	req.session.user = null;
 
 	return res.redirect('/');
 };
 
-user.update = function(req, res) {
-	var email = user.checkSession(req) ? req.session.user.email : req.body.email;
+users.update = function(req, res) {
+	var check = users.checkSession(req);
+	var email = check ? req.session.user.email : req.body.email;
 
 	if (!email) {
-		res.sendStatus(401);
-		return res.end();
+		res.status(401);
+		return res.send('Invalid email address');
 	}
 
-	user.getUser(req, false, function (err, u)  {
+	var ip = req.body.ip || res.locals.ip;
+	var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
+
+	if (!ip.match(matcher)) {
+		res.status(401);
+		return res.send('Invalid IP address');
+	}
+
+	users.getUser(req, false, function (err, u)  {
 		if (err || !u) {
 			res.sendStatus(403);
 			return res.end();
@@ -99,9 +105,9 @@ user.update = function(req, res) {
 		u.ip = req.body.ip || res.locals.ip;
 		u.save();
 
-		user.setSession(req, u);
+		users.setSession(req, u);
 
-		if (user.checkSession(req)) {
+		if (check) {
 			return res.redirect('/');
 		} else {
 			res.sendStatus(204);
@@ -110,4 +116,4 @@ user.update = function(req, res) {
 	});
 };
 
-module.exports = user;
+module.exports = users;

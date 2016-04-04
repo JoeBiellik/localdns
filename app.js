@@ -34,6 +34,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', pages.home);
+app.post('/', pages.homePost);
 app.get('/about', pages.about);
 app.get('/register', users.register);
 app.post('/register', users.registerPost);
