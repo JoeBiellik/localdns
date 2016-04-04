@@ -4,28 +4,34 @@ block nav
  li.nav-item.active
     a(href='/').nav-link Home
   li.nav-item
-    a(href='/login').nav-link Login
+    if loggedIn
+      a(href='/logout').nav-link Logout
+    else
+      a(href='/login').nav-link Login
   li.nav-item
     a(href='/about').nav-link About
 
 block content
-  section.jumbotron.p-y-2
-    h2.display-4.p-y-2 Simple Dynamic DNS
-    p.lead Easily map your dynamic IP address to a short subdomain in seconds! Great for hosting content on your local internet connection with a dynamic address.
-    p
-      a(href='/register').btn.btn-lg.btn-success.text-center.m-t-1 Sign up now
+  if loggedIn
+    
+  else
+    section.jumbotron.p-y-2
+      h2.display-4.p-y-2 Simple Dynamic DNS
+      p.lead Easily map your dynamic IP address to a short subdomain in seconds! Great for hosting content on your local internet connection with a dynamic address.
+      p
+        a(href='/register').btn.btn-lg.btn-success.text-center.m-t-1 Sign up now
 
-  section.row.details
-    div.col-lg-6
-      h4 Free Service
-      p Completely free service with no personal details, tracking, adverts or spam email.
+    section.row.details
+      div.col-lg-6
+        h4 Free Service
+        p Completely free service with no personal details, tracking, adverts or spam email.
 
-      h4 Cross Platform
-      p Deploy with Docker or Vagrant for out the box setup or use anywhere Node.js runs.
+        h4 Cross Platform
+        p Deploy with Docker or Vagrant for out the box setup or use anywhere Node.js runs.
 
-    div.col-lg-6
-      h4 Tiny and Simple
-      p With no external tools and a tiny codebase its easy to make your own modifications.
+      div.col-lg-6
+        h4 Tiny and Simple
+        p With no external tools and a tiny codebase its easy to make your own modifications.
 
-      h4 100% Open Source
-      p Built using open source tools, you can easily customize and run your own service.
+        h4 100% Open Source
+        p Built using open source tools, you can easily customize and run your own service.
