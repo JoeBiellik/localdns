@@ -21,6 +21,8 @@ user.getUser = function(req, verify, callback) {
 };
 
 user.setSession = function(req, u) {
+	if (!u) return;
+
 	req.session.user = {
 		email: u.email,
 		sub: u.sub,
@@ -33,13 +35,16 @@ user.registerPost = function(req, res) {
 		email: req.body.email,
 		sub: req.body.sub,
 		ip: req.body.ip || res.locals.ip,
-		password: req.body.email
+		password: req.body.password
 	});
+
+	// console.log(u);
 
 	u.save();
 
+	// console.log(u);
 	req.session.loggedIn = true;
-	user.setSession(u);
+	user.setSession(req, u);
 
 	return res.redirect('/');
 };
@@ -57,7 +62,7 @@ user.loginPost = function(req, res) {
 			return res.redirect('/');
 		} else {
 			res.locals.errors = [ 'Email and password did not match' ];
-			return res.redirect('/login');
+			user.login(req, res);
 		}
 	});
 }
