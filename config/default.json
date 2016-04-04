@@ -2,6 +2,7 @@
   "domain": "localdns.in",
   "port": 3000,
   "db": "localhost/dns",
+  "ip": "9.9.9.9",
   "dns": {
     "host": "0.0.0.0",
     "port": 53

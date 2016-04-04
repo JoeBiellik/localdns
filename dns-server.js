@@ -21,6 +21,11 @@ var server = dnsd.createServer(function(req, res) {
 	//
 	// u.save();
 
+	if (question.name === config.domain || question.name === 'www.' + config.domain) {
+		res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
+		return res.end();
+	}
+
 	if (!question.name.endsWith('.' + config.domain)) {
 		res.responseCode = 5;
 		return res.end();
