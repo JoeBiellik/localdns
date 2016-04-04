@@ -36,6 +36,7 @@ app.use(function (req, res, next) {
 app.get('/', pages.home);
 app.get('/about', pages.about);
 app.get('/register', users.register);
+app.post('/register', users.registerPost);
 app.get('/login', users.login);
 app.post('/login', users.loginPost);
 app.get('/logout', users.logout);
