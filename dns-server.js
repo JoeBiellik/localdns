@@ -14,30 +14,16 @@ var server = dnsd.createServer(function(req, res) {
 		return res.end();
 	}
 
-	if (question.name === config.domain || question.name === 'www.' + config.domain || question.name === 'ns1.' + config.domain) {
-		config.dns.records.forEach(function(record) {
-			var name = record.name ? record.name + '.' + config.domain : config.domain;
-			if (name === question.name) {
-				if ((question.type !== 'A' && question.type !== 'NS') || record.type === question.type) {
-					res.answer.push({ 'name': name, 'type': record.type, 'data': record.data });
-				}
-			}
-		});
+	config.dns.records.forEach(function(record) {
+		var name = record.name ? record.name + '.' + config.domain : config.domain;
+		if (name !== question.name) return;
 
-		// switch (question.type) {
-		// 	case 'A':
-		// 		res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
-		// 		break;
-		// 	case 'NS':
-		// 		res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
-		// 		break;
-		// 	case '*':
-		// 		res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
-        //         res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
-		// }
+		if (question.type === '*' || record.type === question.type) {
+			res.answer.push({ 'name': name, 'type': record.type, 'data': record.data });
+		}
+	});
 
-		return res.end();
-	}
+	if (res.answer.length) return res.end();
 
 	try {
 		var user = User.findOne({ sub: question.name.substring(0, question.name.lastIndexOf('.' + config.domain)) }, function (err, doc) {
