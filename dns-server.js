@@ -4,14 +4,18 @@ var dnsd = require('dnsd');
 var db = require('./db')();
 var User = require('./models/user');
 
+var typeA = function (res, name) {
+
+};
+
 var server = dnsd.createServer(function(req, res) {
 	var question = res.question && res.question[0];
 
 	// Only allow A record requests
-	if (question.type != 'A') {
-		res.responseCode = 5;
-		return res.end();
-	}
+	// if (question.type != 'A') {
+	// 	res.responseCode = 5;
+	// 	return res.end();
+	// }
 
 	console.log('A lookup for domain: %s', question.name);
 
@@ -24,20 +28,46 @@ var server = dnsd.createServer(function(req, res) {
 	//
 	// u.save();
 
-	if (question.name === config.domain || question.name === 'www.' + config.domain) {
-		res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
+	if (question.name !== config.domain && !question.name.endsWith('.' + config.domain)) {
+		res.responseCode = 5; // Refused
 		return res.end();
 	}
 
-	if (!question.name.endsWith('.' + config.domain)) {
-		res.responseCode = 5;
+	if (question.name === config.domain || question.name === 'www.' + config.domain) {
+		switch (question.type) {
+			case 'A':
+				res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
+				break;
+			case 'NS':
+				res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
+				break;
+			case 'CNAME':
+				res.answer.push({ 'name': question.name, 'type': 'CNAME', 'data': config.domain });
+				res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
+				break;
+			default:
+				res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
+				res.answer.push({ 'name': question.name, 'type': 'CNAME', 'data': config.domain });
+				res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
+		}
+
 		return res.end();
 	}
 
 	try {
 		var user = User.findOne({ sub: question.name.substring(0, question.name.lastIndexOf('.' + config.domain)) }, function (err, doc) {
 			if (!err && doc) {
-				res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
+				switch (question.type) {
+					case 'A':
+						res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
+						break;
+					case 'NS':
+						res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
+						break;
+					default:
+						res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
+						res.answer.push({ 'name': question.name, 'type': 'A', 'data': config.ip });
+				}
 			} else {
 				res.responseCode = 3;
 			}
