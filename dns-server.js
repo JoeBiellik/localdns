@@ -15,6 +15,10 @@ var server = dnsd.createServer(function(req, res) {
 	}
 
 	config.dns.records.forEach(function(record) {
+		if (record.name && record.type === 'NS') {
+            return;
+        }
+
 		var name = record.name ? record.name + '.' + config.domain : config.domain;
 		if (name !== question.name) return;
 
@@ -23,27 +27,13 @@ var server = dnsd.createServer(function(req, res) {
 		}
 	});
 
-	if (res.answer.length) return res.end();
+	if (res.answer.length || question.type === 'SOA') return res.end();
 
 	try {
 		var user = User.findOne({ sub: question.name.substring(0, question.name.lastIndexOf('.' + config.domain)) }, function (err, doc) {
 			if (!err && doc) {
-				switch (question.type) {
-					case 'A':
-						res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
-						break;
-					case 'NS':
-						config.dns.records.forEach(function(record) {
-							if (record.type !== 'NS') return;
-							res.answer.push({ 'name': question.name, 'type': 'NS', 'data': record.name + '.' + config.domain });
-						});
-						break;
-					case '*':
-						config.dns.records.forEach(function(record) {
-							if (record.type !== 'NS') return;
-							res.answer.push({ 'name': question.name, 'type': 'NS', 'data': record.name + '.' + config.domain });
-						});
-						res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
+				if (question.type == 'A' || question.type == '*') {
+					res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
 				}
 			} else {
 				res.responseCode = 3;
