@@ -8,7 +8,10 @@ var server = dnsd.createServer(function(req, res) {
 	var question = res.question && res.question[0];
 
 	// Only allow A record requests
-	if (question.type != 'A') return res.end();
+	if (question.type != 'A') {
+		res.responseCode = 5;
+		return res.end();
+	}
 
 	console.log('A lookup for domain: %s', question.name);
 
