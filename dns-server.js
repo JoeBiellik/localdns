@@ -10,7 +10,7 @@ var server = dnsd.createServer(function(req, res) {
 	console.log('%s lookup for domain: %s', question.name, question.type);
 
 	if (question.name !== config.domain && !question.name.endsWith('.' + config.domain)) {
-		res.responseCode = 5; // Refused
+		res.responseCode = 5; // REFUSED
 		return res.end();
 	}
 
@@ -36,12 +36,13 @@ var server = dnsd.createServer(function(req, res) {
 					res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
 				}
 			} else {
-				res.responseCode = 3;
+				res.responseCode = 3; // NXDOMAIN
 			}
+
 			return res.end();
 		});
 	} catch (ex) {
-		res.responseCode = 2;
+		res.responseCode = 2; // SERVFAIL
 		return res.end();
 	}
 });
