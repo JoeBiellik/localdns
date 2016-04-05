@@ -33,10 +33,16 @@ var server = dnsd.createServer(function(req, res) {
 						res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
 						break;
 					case 'NS':
-						res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
+						config.dns.records.forEach(function(record) {
+							if (record.type !== 'NS') return;
+							res.answer.push({ 'name': question.name, 'type': 'NS', 'data': record.name + '.' + config.domain });
+						});
 						break;
 					case '*':
-						res.answer.push({ 'name': question.name, 'type': 'NS', 'data': 'ns1.' + config.domain });
+						config.dns.records.forEach(function(record) {
+							if (record.type !== 'NS') return;
+							res.answer.push({ 'name': question.name, 'type': 'NS', 'data': record.name + '.' + config.domain });
+						});
 						res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
 				}
 			} else {
@@ -45,6 +51,7 @@ var server = dnsd.createServer(function(req, res) {
 			return res.end();
 		});
 	} catch (ex) {
+		res.responseCode = 2;
 		return res.end();
 	}
 });
