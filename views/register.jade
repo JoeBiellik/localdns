@@ -14,12 +14,12 @@ block content
       if errors && errors.sub
         div.form-group.input-group-lg.has-danger
           div.input-group
-            input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash.', pattern='^[a-z0-9_][a-z0-9_-]{,61}[a-z0-9_]$', required)#inputSubdomain.form-control.form-control-lg.form-control-danger
+            input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', pattern='^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', required)#inputSubdomain.form-control.form-control-lg.form-control-danger
             span.input-group-addon .#{domain}
           div.alert.alert-danger #{errors.sub}
       else
         div.form-group.input-group.input-group-lg
-          input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='Lowercase letters, numbers and dashes (-)', pattern='([a-z0-9-])+', required)#inputSubdomain.form-control.form-control-lg
+          input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', pattern='^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', required)#inputSubdomain.form-control.form-control-lg
           span.input-group-addon .#{domain}
           
       if errors && errors.email
@@ -32,11 +32,11 @@ block content
         
       if errors && errors.password
         div.form-group.has-danger
-          input(type='password', placeholder='Password', name='password', required)#inputPassword.form-control.form-control-lg.form-control-danger
+          input(type='password', placeholder='Password', name='password', title='Minimum 8 characters', pattern='^.{8,}$', required)#inputPassword.form-control.form-control-lg.form-control-danger
           div.alert.alert-danger #{errors.password}
       else
         div.form-group
-          input(type='password', placeholder='Password', name='password', required)#inputPassword.form-control.form-control-lg
+          input(type='password', placeholder='Password', name='password', title='Minimum 8 characters', pattern='^.{8,}$', required)#inputPassword.form-control.form-control-lg
         
       if errors && errors.password_confirm
         div.form-group.has-danger

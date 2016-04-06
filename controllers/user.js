@@ -37,6 +37,14 @@ users.registerPost = function(req, res) {
 		errors.password_confirm = 'Passwords do not match';
 	}
 
+	if (req.body.password.length < 8) {
+		errors.password = 'Must be at least 8 characters';
+	}
+
+	if (!req.body.sub.match(/^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$/)) {
+		errors.sub = '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash.';
+	}
+
 	if (Object.keys(errors).length) {
 		res.locals.body = {
 			email: req.body.email,
