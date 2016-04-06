@@ -181,10 +181,10 @@ users.status = function(req, res) {
 
 	dns.setServers(['8.8.8.8', '8.8.4.4']);
 	dns.resolve4(req.session.user.sub + '.' + config.domain, (err, addresses) => {
-		if (!err) {
+		if (!err && addresses.length > 0) {
 			result.dns = {
 				error: false,
-				result: addresses
+				result: addresses[0]
 			};
 		} else {
 			result.dns = {
@@ -193,20 +193,13 @@ users.status = function(req, res) {
 			};
 		}
 
-		ping.createSession({ retries: 0, timeout: 1000 }).pingHost(req.session.user.ip, function(error, target) {
-			if (error) {
-				result.http = {
-					error: true,
-				};
-
-				res.json(result);
-				return res.end();
+		ping.createSession({ retries: 0, timeout: 1000 }).pingHost((result.dns.error || result.dns.result != req.session.user.ip) ? req.session.user.ip : req.session.user.sub + '.' + config.domain, function(error, target) {
+			if (!error) {
+				result.ping.error = false;
 			}
 
-			result.ping.error = false;
-
 			var request = http.get({
-				hostname: req.session.user.sub + '.' + config.domain, //req.session.user.ip,
+				hostname: (result.dns.error || result.dns.result != req.session.user.ip) ? req.session.user.ip : req.session.user.sub + '.' + config.domain,
 				port: 80,
 				path: '/',
 				agent: false
@@ -219,10 +212,6 @@ users.status = function(req, res) {
 				res.json(result);
 				return res.end();
 			}).on('error', (e) => {
-				result.http = {
-					error: true,
-				};
-
 				if (e.code == 'ENOTFOUND') {
 					result.http.result = 404;
 				}

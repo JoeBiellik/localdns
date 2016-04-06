@@ -1,6 +1,6 @@
 section.m-t-2.p-t-2.text-sm-center
   h3
-    a(href='http://#{user.sub}.#{domain}') #{user.sub}.#{domain}
+    a(href='http://#{user.sub}.#{domain}')#domain #{user.sub}.#{domain}
     |  currently points to 
     a(href='http://#{user.ip}')#ip #{user.ip}
 
@@ -21,19 +21,15 @@ section#status
     div#dns.card.card-inverse
       div.card-block
         h4.card-title DNS
-        p.card-text #{user.sub}.#{domain} 
-          span
+        p.card-text
     div#ping.card.card-inverse
       div.card-block
         h4.card-title Ping
-        p.card-text #{user.sub}.#{domain} is 
-          span
-          | replying to pings
+        p.card-text
     div#http.card.card-inverse
       div.card-block
         h4.card-title HTTP
-        p.card-text http://#{user.sub}.#{domain} 
-          span
+        p.card-text
 
 div.card.m-x-1.m-b-3
   div.card-block
