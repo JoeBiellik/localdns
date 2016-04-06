@@ -1,0 +1,101 @@
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin-bottom: 50px;
+}
+
+@media (min-width: 48em) {
+	.container {
+	max-width: 46rem;
+	}
+}
+
+header {
+	border-bottom: 1px solid #e5e5e5;
+}
+
+li.nav-item.active a.nav-link {
+	color: #373a3c;
+}
+
+.jumbotron {
+	text-align: center;
+}
+
+.details {
+	margin: 3rem 0;
+}
+.details p + h4 {
+	margin-top: 2.5rem;
+}
+
+.form-group.has-danger .form-control {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-style: solid;
+	border-width: 1px 1px 0 1px;
+}
+.form-group.has-danger .input-group-addon {
+	border-bottom-right-radius: 0;
+	border-style: solid;
+	border-width: 1px 1px 0 0;
+}
+.form-group.has-danger .alert-danger {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border-color: #d9534f;
+}
+
+.input-group-addon {
+	background-color: #f3f3f3;
+}
+
+footer {
+	width: 100%;
+	height: 50px;
+	position: absolute;
+	bottom: 0;
+	line-height: 20px;
+}
+
+#spinner {
+	width: 50px;
+	height: 50px;
+
+	position: relative;
+	margin: 50px auto;
+}
+.double-bounce1, .double-bounce2 {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: #aaa;
+	opacity: 0.6;
+	position: absolute;
+	top: 0;
+	left: 0;
+	
+	-webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+	animation: sk-bounce 2.0s infinite ease-in-out;
+}
+.double-bounce2 {
+	-webkit-animation-delay: -1.0s;
+	animation-delay: -1.0s;
+}
+@-webkit-keyframes sk-bounce {
+	0%, 100% { -webkit-transform: scale(0.0) }
+	50% { -webkit-transform: scale(1.0) }
+}
+@keyframes sk-bounce {
+	0%, 100% { 
+	transform: scale(0.0);
+	-webkit-transform: scale(0.0);
+	} 50% { 
+	transform: scale(1.0);
+	-webkit-transform: scale(1.0);
+	}
+}
