@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 		var resolveMatch = !data.dns.error && data.dns.result == ip;
 
-		$('#status #results #dns').addClass(resolveMatch ? 'card-danger' : 'card-success');
+		$('#status #results #dns').addClass(!resolveMatch ? 'card-danger' : 'card-success');
 		$('#status #results #dns p').text(domain + (data.dns.error ? ' does not resolve' : ' resolves to ' + data.dns.result));
 
 		$('#status #results #ping').addClass(data.ping.error ? 'card-warning' : 'card-success');
