@@ -45,28 +45,39 @@ users.registerPost = function(req, res) {
 		errors.sub = '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash.';
 	}
 
-	if (Object.keys(errors).length) {
-		res.locals.body = {
-			email: req.body.email,
-			sub: req.body.sub,
-		};
-		res.locals.errors = errors;
-		return users.register(req, res);
-	}
+	User.count({ email: req.body.email }, function (err, count) {
+		if (!err && count) {
+			errors.email = 'Email already in use';
+		}
 
-	var u = new User({
-		email: req.body.email,
-		sub: req.body.sub,
-		ip: res.locals.ip,
-		password: req.body.password
+		User.count({ sub: req.body.sub }, function (err, count) {
+			if (!err && count) {
+				errors.sub = 'Subdomain already in use';
+			}
+
+			if (Object.keys(errors).length) {
+				res.locals.body = {
+					email: req.body.email,
+					sub: req.body.sub,
+				};
+				res.locals.errors = errors;
+				return users.register(req, res);
+			} else {
+				var u = new User({
+					email: req.body.email,
+					sub: req.body.sub,
+					ip: res.locals.ip,
+					password: req.body.password
+				});
+
+				u.save();
+
+				req.session.loggedIn = true;
+				users.setSession(req, u);
+				return res.redirect('/');
+			}
+		});
 	});
-
-	u.save();
-
-	req.session.loggedIn = true;
-	users.setSession(req, u);
-
-	return res.redirect('/');
 };
 
 users.register = function(req, res) {
