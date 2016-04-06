@@ -1,3 +1,7 @@
+var config = require('config');
+var dns = require('dns');
+var http = require('http');
+var ping = require ("net-ping");
 var db = require('../db')();
 var User = require('../models/user');
 var validator = require('email-validator');
@@ -152,6 +156,67 @@ users.update = function(req, res) {
 			res.sendStatus(204);
 			return res.end();
 		}
+	});
+};
+
+users.status = function(req, res) {
+	var check = users.checkSession(req);
+
+	if (!check) {
+		res.sendStatus(403);
+		return res.end();
+	}
+
+	var result = {};
+
+	dns.setServers(['8.8.8.8', '8.8.4.4']);
+	dns.resolve4(req.session.user.sub + '.' + config.domain, (err, addresses) => {
+		if (err) {
+			result.dns = {
+				error: true
+			};
+		} else {
+			result.dns = {
+				error: false,
+				result: addresses
+			};
+		}
+
+		ping.createSession({ retries: 0, timeout: 1000 }).pingHost(req.session.user.ip, function(error, target) {
+			if (error) {
+				result.ping = {
+					error: true
+				};
+			} else {
+				result.ping = {
+					error: false
+				};
+
+				var request = http.get({
+					hostname: req.session.user.sub + '.' + config.domain, //req.session.user.ip,
+					port: 80,
+					path: '/',
+					agent: false
+				}, (httpRes) => {
+					result.http = {
+						error: false,
+						result: httpRes.statusCode
+					};
+
+					res.json(result);
+					return res.end();
+				});
+				
+				request.setTimeout(1000, function() {
+					result.http = {
+						error: true
+					};
+
+					res.json(result);
+					return res.end();
+				});
+			}
+		});
 	});
 };
 

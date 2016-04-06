@@ -31,7 +31,8 @@
     "express-session": "^1.13.0",
     "jade": "^1.11.0",
     "mongoose": "^4.1.12",
-    "mongoose-bcrypt": "^1.2.3"
+    "mongoose-bcrypt": "^1.2.3",
+    "net-ping": "^1.2.0"
   },
   "devDependencies": {
     "eslint": "^2.6.0",

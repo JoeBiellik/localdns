@@ -41,5 +41,6 @@ app.get('/login', users.login);
 app.post('/login', users.loginPost);
 app.get('/logout', users.logout);
 app.post('/update', users.update);
+app.get('/status.json', users.status);
 
 module.exports = app;
