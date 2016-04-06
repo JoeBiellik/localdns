@@ -167,15 +167,21 @@ users.status = function(req, res) {
 		return res.end();
 	}
 
-	var result = {};
+	var result = {
+		dns: {
+			error: true
+		},
+		ping: {
+			error: true
+		},
+		http: {
+			error: true
+		}
+	};
 
 	dns.setServers(['8.8.8.8', '8.8.4.4']);
 	dns.resolve4(req.session.user.sub + '.' + config.domain, (err, addresses) => {
-		if (err) {
-			result.dns = {
-				error: true
-			};
-		} else {
+		if (!err) {
 			result.dns = {
 				error: false,
 				result: addresses
@@ -183,14 +189,8 @@ users.status = function(req, res) {
 		}
 
 		ping.createSession({ retries: 0, timeout: 1000 }).pingHost(req.session.user.ip, function(error, target) {
-			if (error) {
-				result.ping = {
-					error: true
-				};
-			} else {
-				result.ping = {
-					error: false
-				};
+			if (!error) {
+				result.ping.error = false;
 
 				var request = http.get({
 					hostname: req.session.user.sub + '.' + config.domain, //req.session.user.ip,
@@ -206,12 +206,8 @@ users.status = function(req, res) {
 					res.json(result);
 					return res.end();
 				});
-				
-				request.setTimeout(1000, function() {
-					result.http = {
-						error: true
-					};
 
+				request.setTimeout(1000, function() {
 					res.json(result);
 					return res.end();
 				});
