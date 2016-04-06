@@ -1,0 +1,8 @@
+p.lead #{user.sub}.#{domain} currently points to #{user.ip}
+
+form(method='post', action='/')
+  div.row
+    div.col-sm-9
+      input(type='text', value='#{ip}', placeholder='IP Address', name='ip', title='Valid IP v4 address', pattern='^(?:(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)\\.){3}(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)$', required, autofocus)#inputIp.form-control.form-control-lg
+    div.col-sm-3
+      button(type='submit').btn.btn-lg.btn-primary.btn-block Update
