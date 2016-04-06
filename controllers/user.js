@@ -1,5 +1,6 @@
 var db = require('../db')();
 var User = require('../models/user');
+var validator = require('email-validator');
 
 var users = {};
 
@@ -45,9 +46,13 @@ users.registerPost = function(req, res) {
 		errors.sub = '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash.';
 	}
 
+	if (!validator.validate(req.body.email)) {
+		errors.email = 'Invalid email address';
+	}
+
 	User.count({ email: req.body.email }, function (err, count) {
 		if (!err && count) {
-			errors.email = 'Email already in use';
+			errors.email = 'Email address already in use';
 		}
 
 		User.count({ sub: req.body.sub }, function (err, count) {

@@ -14,21 +14,21 @@ block content
       if errors && errors.sub
         div.form-group.input-group-lg.has-danger
           div.input-group
-            input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', pattern='^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', required)#inputSubdomain.form-control.form-control-lg.form-control-danger
+            input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', pattern='^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', required, autofocus)#inputSubdomain.form-control.form-control-lg.form-control-danger
             span.input-group-addon .#{domain}
           div.alert.alert-danger #{errors.sub}
       else
         div.form-group.input-group.input-group-lg
-          input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', pattern='^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', required)#inputSubdomain.form-control.form-control-lg
+          input(type='text', placeholder='Subdomain', name='sub', value=(body && body.sub), title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', pattern='^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', required, autofocus)#inputSubdomain.form-control.form-control-lg
           span.input-group-addon .#{domain}
           
       if errors && errors.email
         div.form-group.has-danger
-          input(type='email', placeholder='Email Address', name='email', value=(body && body.email), required, autofocus)#inputEmail.form-control.form-control-lg.form-control-danger
+          input(type='email', placeholder='Email Address', name='email', value=(body && body.email), required)#inputEmail.form-control.form-control-lg.form-control-danger
           div.alert.alert-danger #{errors.email}
       else
         div.form-group
-          input(type='email', placeholder='Email Address', name='email', value=(body && body.email), required, autofocus)#inputEmail.form-control.form-control-lg
+          input(type='email', placeholder='Email Address', name='email', value=(body && body.email), required)#inputEmail.form-control.form-control-lg
         
       if errors && errors.password
         div.form-group.has-danger
@@ -40,10 +40,10 @@ block content
         
       if errors && errors.password_confirm
         div.form-group.has-danger
-          input(type='password', placeholder='Password Confirm', name='password_confirm', required)#inputPasswordConfirm.form-control.form-control-lg.form-control-danger
+          input(type='password', placeholder='Password Confirm', name='password_confirm', title='Minimum 8 characters', pattern='^.{8,}$',, required)#inputPasswordConfirm.form-control.form-control-lg.form-control-danger
           div.alert.alert-danger #{errors.password_confirm}
       else
         div.form-group
-          input(type='password', placeholder='Password Confirm', name='password_confirm', required)#inputPasswordConfirm.form-control.form-control-lg
+          input(type='password', placeholder='Password Confirm', name='password_confirm', title='Minimum 8 characters', pattern='^.{8,}$',, required)#inputPasswordConfirm.form-control.form-control-lg
           
       button(type='submit').btn.btn-lg.btn-primary.btn-block Register
