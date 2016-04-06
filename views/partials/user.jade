@@ -4,13 +4,27 @@ section.m-t-2.p-t-2.text-sm-center
     |  currently points to 
     a(href='http://#{user.ip}') #{user.ip}
 
-section.m-t-3.m-x-1.m-b-3.p-b-2
+section.m-t-3.m-x-1.m-b-3
   form(method='post', action='/')
     div.row
       div.col-sm-9
         input(type='text', value='#{ip}', placeholder='IP Address', name='ip', title='Valid IPv4 address', pattern='^(?:(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)\\.){3}(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)$', required, autofocus).form-control.form-control-lg
       div.col-sm-3
         button(type='submit').btn.btn-lg.btn-primary.btn-block Update
+
+section.p-x-1.m-b-3.card-group
+  div.card.card-inverse.card-success
+    div.card-block
+      h4.card-title DNS
+      p.card-text #{user.sub}.#{domain} resolves to #{user.ip}
+  div.card.card-inverse.card-warning
+    div.card-block
+      h4.card-title Ping
+      p.card-text #{user.sub}.#{domain} is not replying to pings
+  div.card.card-inverse.card-danger
+    div.card-block
+      h4.card-title HTTP
+      p.card-text http://#{user.sub}.#{domain} returns status code 500
 
 div.card.m-x-1.m-b-3
   div.card-block
