@@ -25,7 +25,9 @@ app.use(session({
 }));
 
 app.use(function (req, res, next) {
-	res.locals.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+	if (ip.startsWith('::ffff:')) ip = ip.substring(7);
+	res.locals.ip = ip;
 	res.locals.loggedIn = users.checkSession(req);
 	res.locals.user = req.session.user;
 
