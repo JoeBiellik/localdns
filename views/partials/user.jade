@@ -37,7 +37,7 @@ section#status
 
 div.card.m-x-1.m-b-3
   div.card-block
-    h4.card-title.p-b-2.text-muted Settings
+    h4.card-title.m-b-2.text-muted Settings
 
     form(method='post', action='/')
       div.form-group.row
@@ -63,3 +63,7 @@ div.card.m-x-1.m-b-3
           input(type='email', placeholder='Password Confirm', name='password_confirm', required).form-control
         div.col-sm-3
           button(type='submit').btn.btn-secondary.btn-block Change
+
+block js
+  script(src='https://code.jquery.com/jquery-2.2.2.min.js')
+  script(src='/main.js')
