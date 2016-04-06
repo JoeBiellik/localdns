@@ -2,7 +2,7 @@ section.m-t-2.p-t-2.text-sm-center
   h3
     a(href='http://#{user.sub}.#{domain}') #{user.sub}.#{domain}
     |  currently points to 
-    a(href='http://#{user.ip}') #{user.ip}
+    a(href='http://#{user.ip}')#ip #{user.ip}
 
 section.m-t-3.m-x-1.m-b-3
   form(method='post', action='/')
@@ -17,11 +17,11 @@ section#status
     div.double-bounce1
     div.double-bounce2
 
-  article(style='display: none;')#results.p-x-1.m-b-3.card-group
+  article(style='display: none;')#results.p-x-1.m-b-3.card-group.text-sm-center
     div#dns.card.card-inverse
       div.card-block
         h4.card-title DNS
-        p.card-text #{user.sub}.#{domain}
+        p.card-text #{user.sub}.#{domain} 
           span
     div#ping.card.card-inverse
       div.card-block
@@ -32,7 +32,7 @@ section#status
     div#http.card.card-inverse
       div.card-block
         h4.card-title HTTP
-        p.card-text http://#{user.sub}.#{domain} returns status code 
+        p.card-text http://#{user.sub}.#{domain} 
           span
 
 div.card.m-x-1.m-b-3
