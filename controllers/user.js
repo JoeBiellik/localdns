@@ -186,32 +186,55 @@ users.status = function(req, res) {
 				error: false,
 				result: addresses
 			};
+		} else {
+			result.dns = {
+				error: true,
+				result: ''
+			};
 		}
 
 		ping.createSession({ retries: 0, timeout: 1000 }).pingHost(req.session.user.ip, function(error, target) {
-			if (!error) {
-				result.ping.error = false;
+			if (error) {
+				result.http = {
+					error: true,
+				};
 
-				var request = http.get({
-					hostname: req.session.user.sub + '.' + config.domain, //req.session.user.ip,
-					port: 80,
-					path: '/',
-					agent: false
-				}, (httpRes) => {
-					result.http = {
-						error: false,
-						result: httpRes.statusCode
-					};
-
-					res.json(result);
-					return res.end();
-				});
-
-				request.setTimeout(1000, function() {
-					res.json(result);
-					return res.end();
-				});
+				res.json(result);
+				return res.end();
 			}
+
+			result.ping.error = false;
+
+			var request = http.get({
+				hostname: req.session.user.sub + '.' + config.domain, //req.session.user.ip,
+				port: 80,
+				path: '/',
+				agent: false
+			}, (httpRes) => {
+				result.http = {
+					error: false,
+					result: httpRes.statusCode
+				};
+
+				res.json(result);
+				return res.end();
+			}).on('error', (e) => {
+				result.http = {
+					error: true,
+				};
+
+				if (e.code == 'ENOTFOUND') {
+					result.http.result = 404;
+				}
+
+				res.json(result);
+				return res.end();
+			});
+
+			request.setTimeout(1000, function() {
+				res.json(result);
+				return res.end();
+			});
 		});
 	});
 };

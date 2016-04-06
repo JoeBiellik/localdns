@@ -40,10 +40,10 @@ block content
         
       if errors && errors.password_confirm
         div.form-group.has-danger
-          input(type='password', placeholder='Password Confirm', name='password_confirm', title='Minimum 8 characters', pattern='^.{8,}$',, required)#inputPasswordConfirm.form-control.form-control-lg.form-control-danger
+          input(type='password', placeholder='Password Confirm', name='password_confirm', title='Minimum 8 characters', pattern='^.{8,}$', required)#inputPasswordConfirm.form-control.form-control-lg.form-control-danger
           div.alert.alert-danger #{errors.password_confirm}
       else
         div.form-group
-          input(type='password', placeholder='Password Confirm', name='password_confirm', title='Minimum 8 characters', pattern='^.{8,}$',, required)#inputPasswordConfirm.form-control.form-control-lg
+          input(type='password', placeholder='Password Confirm', name='password_confirm', title='Minimum 8 characters', pattern='^.{8,}$', required)#inputPasswordConfirm.form-control.form-control-lg
           
       button(type='submit').btn.btn-lg.btn-primary.btn-block Register
