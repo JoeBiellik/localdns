@@ -1,8 +1,41 @@
-p.lead #{user.sub}.#{domain} currently points to #{user.ip}
+section.m-y-3.text-sm-center
+  h3
+    a(href='http://#{user.sub}.#{domain}') #{user.sub}.#{domain}
+    |  currently points to 
+    a(href='http://#{user.ip}') #{user.ip}
 
-form(method='post', action='/')
-  div.row
-    div.col-sm-9
-      input(type='text', value='#{ip}', placeholder='IP Address', name='ip', title='Valid IP v4 address', pattern='^(?:(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)\\.){3}(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)$', required, autofocus)#inputIp.form-control.form-control-lg
-    div.col-sm-3
-      button(type='submit').btn.btn-lg.btn-primary.btn-block Update
+section.m-y-3.m-x-2
+  form(method='post', action='/')
+    div.row
+      div.col-sm-9
+        input(type='text', value='#{ip}', placeholder='IP Address', name='ip', title='Valid IP v4 address', pattern='^(?:(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)\\.){3}(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)$', required, autofocus).form-control.form-control-lg
+      div.col-sm-3
+        button(type='submit').btn.btn-lg.btn-primary.btn-block Update
+
+section.m-y-2.m-x-2
+  form(method='post', action='/')
+    div.form-group.row
+      div.input-group.col-sm-9
+        input(type='text', placeholder='Subdomain', name='sub', value=user.sub, title='2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash.', pattern='^[a-z0-9_][a-z0-9_-]{,61}[a-z0-9_]$', required).form-control
+        span.input-group-addon .#{domain}
+      div.col-sm-3
+        button(type='submit').btn.btn-default.btn-block Change
+
+section.m-y-2.m-x-2
+  form(method='post', action='/')
+    div.form-group.row
+      div.col-sm-9
+        input(type='email', placeholder='Email Address', name='email', value=user.email, required).form-control
+      div.col-sm-3
+        button(type='submit').btn.btn-default.btn-block Change
+
+section.m-y-2.m-x-2
+  form(method='post', action='/')
+    div.form-group.row
+      div.col-sm-9
+        input(type='email', placeholder='Password', name='password', required).form-control
+    div.form-group.row
+      div.col-sm-9
+        input(type='email', placeholder='Password Confirm', name='password_confirm', required).form-control
+      div.col-sm-3
+        button(type='submit').btn.btn-default.btn-block Change
