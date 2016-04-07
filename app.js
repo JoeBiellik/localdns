@@ -7,6 +7,7 @@ var app = express();
 var pages = require('./controllers/page');
 var users = require('./controllers/user');
 
+app.disable('x-powered-by');
 app.set('view engine', 'jade');
 
 app.locals.pretty = true;
