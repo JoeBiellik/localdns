@@ -1,0 +1,16 @@
+version: '2'
+services:
+  app:
+    command: "npm start"
+    restart: always
+    environment:
+     - NODE_ENV=docker
+    ports:
+     - "80:80"
+  dns:
+    command: "npm run dns-server"
+    restart: always
+    environment:
+     - NODE_ENV=docker
+  db:
+    restart: always

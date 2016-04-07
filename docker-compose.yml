@@ -7,20 +7,16 @@ services:
     links:
      - dns
      - db
-    environment:
-     - NODE_ENV=docker
     volumes:
      - .:/app
     ports:
-     - "3001:80"
+     - "3000:80"
   dns:
     image: node:latest
     command: "npm run watch dns-server"
     working_dir: /app
     links:
      - db
-    environment:
-     - NODE_ENV=docker
     volumes:
      - .:/app
     expose:
@@ -36,5 +32,3 @@ services:
      - ./db:/data/db
     expose:
      - 27017
-    ports:
-     - "27017:27017"

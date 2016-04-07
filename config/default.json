@@ -1,31 +1,26 @@
 {
-  "domain": "localdns.in",
-  "port": 3000,
-  "db": "localhost/dns",
-  "contact": "contact@localdns.in",
+  "domain": "localdns.local",
+  "port": 80,
+  "db": "db/dev",
+  "contact": "root@localhost",
   "dns": {
     "host": "0.0.0.0",
     "port": 53,
     "records": [
       {
-        "name": "www",
-        "type": "A",
-        "data": "144.76.69.79"
-      },
-      {
         "name": null,
         "type": "NS",
-        "data": "ns1.localdns.in"
+        "data": "ns1.localdns.local"
       },
       {
         "name": "ns1",
         "type": "A",
-        "data": "144.76.69.89"
+        "data": "1.2.3.4"
       },
       {
         "name": null,
         "type": "A",
-        "data": "144.76.69.79"
+        "data": "1.2.3.4"
       }
     ]
   },
