@@ -30,6 +30,7 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "jade": "^1.11.0",
+    "jstransformer-markdown": "^1.1.0",
     "mongoose": "^4.1.12",
     "mongoose-bcrypt": "^1.2.3",
     "net-ping": "^1.2.0"

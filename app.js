@@ -10,6 +10,7 @@ var users = require('./controllers/user');
 app.disable('x-powered-by');
 app.set('view engine', 'jade');
 
+app.locals.basedir = './';
 app.locals.pretty = true;
 app.locals.domain = config.domain;
 
