@@ -214,10 +214,6 @@ users.status = function(req, res) {
 				res.json(result);
 				return res.end();
 			}).on('error', (e) => {
-				if (e.code == 'ENOTFOUND') {
-					result.http.result = 404;
-				}
-
 				res.json(result);
 				return res.end();
 			});
