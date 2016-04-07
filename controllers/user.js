@@ -162,6 +162,8 @@ users.update = function(req, res) {
 users.status = function(req, res) {
 	var check = users.checkSession(req);
 
+	res.set('Cache-Control', 'no-cache');
+
 	if (!check) {
 		res.sendStatus(403);
 		return res.end();
