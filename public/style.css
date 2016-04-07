@@ -54,6 +54,18 @@ li.nav-item.active a.nav-link {
 	background-color: #f3f3f3;
 }
 
+pre code {
+	background-color: #f7f7f9;
+	border-radius: 0.25rem;
+    color: #bd4147;
+    padding: 0.5rem 0.8rem;
+	display: block;
+}
+
+h1#localdns, h1#localdns + p a {
+	display: none;
+}
+
 footer {
 	width: 100%;
 	height: 50px;
