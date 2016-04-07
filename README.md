@@ -52,7 +52,7 @@ Comparable routers can directly update your IP address...
   dig localdns.local @localhost
   ```
 
-5. Register an account and subdomain in your browser at `http://localhost:3000`
+5. Register an account and subdomain in your browser at `http://localhost:3000/`
 
 6. Lookup the subdomain and check the IP address:
   ```
@@ -73,5 +73,5 @@ Comparable routers can directly update your IP address...
 
 5. Test DNS resolution:
   ```
-  dig your.domain @ns1.your.domain
+  dig your.domain ANY @ns1.your.domain
   ```

@@ -1,14 +1,18 @@
 {
-  "name": "dynamicdns",
+  "name": "localdns",
   "version": "1.0.0",
   "description": "Dynamic DNS service",
   "license": "MIT",
-  "repository": "JoeBiellik/dynamicdns",
-  "homepage": "https://github.com/JoeBiellik/dynamicdns",
+  "repository": "JoeBiellik/localdns",
+  "homepage": "https://github.com/JoeBiellik/localdns",
   "author": "Joe Biellik <contact@joebiellik.com> (http://joebiellik.com/)",
+  "contributors": [
+    "Joe Biellik <contact@joebiellik.com> (http://joebiellik.com/)",
+    "Mat Lomax <contact@matlomax.com> (http://matlomax.com/)"
+  ],
   "bugs": {
     "email": "contact@joebiellik.com",
-    "url": "https://github.com/JoeBiellik/dynamicdns/issues"
+    "url": "https://github.com/JoeBiellik/localdns/issues"
   },
   "keywords": [
     "dynamic dns",
