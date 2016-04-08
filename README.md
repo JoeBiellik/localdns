@@ -66,7 +66,7 @@ Comparable routers can directly update your IP address...
 
 3. Make sure your server's firewall allows external DNS traffic on port 53 TCP and UDP
 
-4. Start the production stack:
+4. Follow [development](#development) steps 1 and 2 above and start the production stack:
   ```
   docker-compose -f docker-compose.yml -f production.yml up
   ```
