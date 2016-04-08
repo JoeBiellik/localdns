@@ -18,15 +18,15 @@ section#status
     div.double-bounce2
 
   article(style='display: none;')#results.p-x-1.m-b-3.card-group.text-sm-center
-    div#dns.card.card-inverse
+    div(data-toggle='tooltip' title="These results are from Google's Public DNS service")#dns.card.card-inverse
       div.card-block
         h4.card-title DNS
         p.card-text
-    div#ping.card.card-inverse
+    div(data-toggle='tooltip' title='Checks for a response from an ICMP echo request')#ping.card.card-inverse
       div.card-block
         h4.card-title Ping
         p.card-text
-    div#http.card.card-inverse
+    div(data-toggle='tooltip' title='Results of an HTTP GET request')#http.card.card-inverse
       div.card-block
         h4.card-title HTTP
         p.card-text
@@ -94,4 +94,6 @@ div.card.m-x-1.m-b-3
             button(type='submit').btn.btn-secondary.btn-block Change
             
 script(src='https://code.jquery.com/jquery-2.2.2.min.js')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/js/bootstrap.min.js')
 script(src='/main.js')

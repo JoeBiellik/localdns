@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	$('[data-toggle="tooltip"]').tooltip();
+
 	var ip = $('#ip').text();
 	var domain = $('#domain').text();
 
