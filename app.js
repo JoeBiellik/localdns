@@ -14,8 +14,8 @@ app.locals.basedir = './';
 app.locals.pretty = true;
 app.locals.domain = config.domain;
 
+app.use(require('compression')());
 app.use(express.static('public'));
-
 app.use(require('body-parser').urlencoded({ extended: false }));
 
 app.use(session({
