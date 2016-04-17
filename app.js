@@ -23,7 +23,7 @@ app.use(session({
 	secret: 'foo',
 	resave: false,
 	saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: db })
+	store: new MongoStore({ mongooseConnection: db })
 }));
 
 app.use(function (req, res, next) {
@@ -44,6 +44,7 @@ app.post('/register', users.registerPost);
 app.get('/login', users.login);
 app.post('/login', users.loginPost);
 app.get('/logout', users.logout);
+app.get('/update', users.update);
 app.post('/update', users.update);
 app.get('/status.json', users.status);
 

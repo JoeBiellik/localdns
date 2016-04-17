@@ -25,6 +25,16 @@
     "watch dns-server": "./node_modules/.bin/nodemon -L -e js,json -i ./public dns-server.js",
     "lint": "./node_modules/.bin/eslint . && ./node_modules/.bin/jade-lint ./views/"
   },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "rules": {
+      "indent": [2, "tab"],
+      "quotes": [2, "single", "avoid-escape"]
+    }
+  },
   "dependencies": {
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",

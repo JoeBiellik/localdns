@@ -16,8 +16,8 @@ var server = dnsd.createServer(function(req, res) {
 
 	config.dns.records.forEach(function(record) {
 		if (record.name && record.type === 'NS') {
-            return;
-        }
+			return;
+		}
 
 		var name = record.name ? record.name + '.' + config.domain : config.domain;
 		if (name !== question.name) return;
