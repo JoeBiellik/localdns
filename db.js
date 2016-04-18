@@ -9,7 +9,7 @@ module.exports = function () {
 		util.log('MongoDB connection open');
 	});
 
-	mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
+	mongoose.connection.on('error', util.error.bind(console, 'MongoDB connection error:'));
 
 	return mongoose.connection;
 }

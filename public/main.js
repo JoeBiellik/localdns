@@ -1,3 +1,5 @@
+/*global document $:true*/
+
 $(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip();
 

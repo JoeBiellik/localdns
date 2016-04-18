@@ -7,7 +7,7 @@ var User = require('./models/user');
 var server = dnsd.createServer(function(req, res) {
 	var question = res.question && res.question[0];
 
-	console.log('%s lookup for domain: %s', question.name, question.type);
+	util.log('%s lookup for domain: %s', question.name, question.type);
 
 	if (question.name !== config.domain && !question.name.endsWith('.' + config.domain)) {
 		res.responseCode = 5; // REFUSED
@@ -30,7 +30,7 @@ var server = dnsd.createServer(function(req, res) {
 	if (res.answer.length || question.type === 'SOA') return res.end();
 
 	try {
-		var user = User.findOne({ sub: question.name.substring(0, question.name.lastIndexOf('.' + config.domain)) }, function (err, doc) {
+		User.findOne({ sub: question.name.substring(0, question.name.lastIndexOf('.' + config.domain)) }, function (err, doc) {
 			if (!err && doc) {
 				if (question.type == 'A' || question.type == '*') {
 					res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
