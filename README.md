@@ -39,7 +39,7 @@ Comparable routers can directly update your IP address...
 
 2. Install dependencies:
   ```
-  docker-compose run --no-deps app npm install
+  docker-compose run --no-deps --rm app npm install
   ```
 
 3. Start app, DNS server and database:
