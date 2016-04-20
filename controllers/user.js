@@ -283,7 +283,7 @@ users.status = function(req, res) {
 				return res.end();
 			});
 
-			request.setTimeout(10);
+			request.setTimeout(1000);
 		});
 	});
 };
