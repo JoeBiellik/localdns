@@ -40,7 +40,7 @@ users.getUser = function(email, password) {
 	return new Promise((resolve, reject) => {
 		if (!Boolean(email) || !Boolean(password)) return reject();
 
-		User.findOne({ email: req.session.user.email }, (err, doc) => {
+		User.findOne({ email: email }, (err, doc) => {
 			if (!err && doc && doc.verifyPasswordSync(password)) {
 				return resolve(doc);
 			} else {
@@ -117,6 +117,7 @@ users.register = wrap(function*(req, res) {
 users.login = wrap(function* (req, res) {
 	try {
 		var user = yield users.getUser(req.body.email, req.body.password);
+		console.log(user);
 
 		users.setSession(req, user);
 
@@ -308,8 +309,8 @@ users.status = function(req, res) {
 			});
 
 			var timeout = request.setTimeout(1000, () => {
-				res.json(result);
-				return res.end();
+				// res.json(result);
+				// return res.end();
 			});
 		});
 	});
