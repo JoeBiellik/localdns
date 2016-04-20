@@ -168,7 +168,7 @@ users.update = wrap(function* (req, res) {
 		try {
 			var user = yield users.basicAuth(req, res);
 
-			User.findOne({ email: reqAuth.user }, function (err, doc) {
+			User.findOne({ email: user }, function (err, doc) {
 				doc.ip = req.body.ip || res.locals.ip;
 				doc.save();
 
