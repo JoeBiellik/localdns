@@ -1,7 +1,3 @@
-var wrap = require('co-express');
-var config = require('config');
-var users = require('./user');
-
 var pages = {};
 
 pages.home = function(req, res) {
@@ -9,20 +5,20 @@ pages.home = function(req, res) {
 };
 
 pages.register = function(req, res) {
-	if (users.loggedIn(req)) return res.redirect('/');
+	if (res.locals.loggedIn) return res.redirect('/');
 
 	res.render('register', { title: 'Register' });
 };
 
 pages.login = function(req, res) {
-	if (users.loggedIn(req)) return res.redirect('/');
+	if (res.locals.loggedIn) return res.redirect('/');
 
 	res.render('login', { title: 'Login' });
 };
 
 pages.logout = function(req, res) {
 	req.session.loggedIn = false;
-	users.setSession(req);
+	require('./user').setSession(req);
 
 	res.redirect('/');
 };

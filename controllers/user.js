@@ -22,10 +22,6 @@ users.setSession = function(req, user) {
 	}
 };
 
-users.loggedIn = function(req) {
-	return Boolean(req.session.user) && Boolean(req.session.user.email);
-};
-
 users.checkSession = function(req) {
 	return new Promise((resolve, reject) => {
 		if (!Boolean(req.session.user) || !Boolean(req.session.user.email)) return reject();
@@ -40,28 +36,12 @@ users.checkSession = function(req) {
 	});
 };
 
-users.getSessionUser = function(req) {
+users.getUser = function(email, password) {
 	return new Promise((resolve, reject) => {
-		if (!users.checkSession(req)) return reject();
+		if (!Boolean(email) || !Boolean(password)) return reject();
 
 		User.findOne({ email: req.session.user.email }, (err, doc) => {
-			if (!err && doc) {
-				return resolve(doc);
-			} else {
-				return reject();
-			}
-		});
-	});
-};
-
-users.getUser = function(req, verify) {
-	return new Promise((resolve, reject) => {
-		var email = users.checkSession(req) ? req.session.user.email : req.body.email;
-
-		if (verify && (!req.body.email || !req.body.password)) return reject();
-
-		User.findOne({ email: email }, function (err, doc) {
-			if (!err && doc && (!verify || users.checkSession(req) || doc.verifyPasswordSync(req.body.password))) {
+			if (!err && doc && doc.verifyPasswordSync(password)) {
 				return resolve(doc);
 			} else {
 				return reject();
@@ -136,9 +116,8 @@ users.register = wrap(function*(req, res) {
 
 users.login = wrap(function* (req, res) {
 	try {
-		var user = yield users.getUser(req, true);
+		var user = yield users.getUser(req.body.email, req.body.password);
 
-		req.session.loggedIn = true;
 		users.setSession(req, user);
 
 		return res.redirect('/');
