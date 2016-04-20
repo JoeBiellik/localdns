@@ -299,19 +299,14 @@ users.status = function(req, res) {
 					result: httpRes.statusCode
 				};
 
-				clearTimeout(timeout);
 				res.json(result);
 				return res.end();
 			}).on('error', () => {
-				clearTimeout(timeout);
-				res.json(result);
+					res.json(result);
 				return res.end();
 			});
 
-			var timeout = request.setTimeout(1000, () => {
-				// res.json(result);
-				// return res.end();
-			});
+			request.setTimeout(10);
 		});
 	});
 };
