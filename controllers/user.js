@@ -125,7 +125,6 @@ users.register = wrap(function*(req, res) {
 users.login = wrap(function* (req, res) {
 	try {
 		var user = yield users.getUser(req.body.email, req.body.password);
-		console.log(user);
 
 		users.setSession(req, user);
 
@@ -198,22 +197,37 @@ users.update = wrap(function* (req, res) {
 	var check = users.checkSession(req);
 
 	if (!check) {
-		try {
-			var user = yield users.basicAuth(req, res);
+		if (req.body.email && req.body.password) {
+			try {
+				var user = yield users.getUser(req.body.email, req.body.password);
 
-			User.findOne({ email: user }, function (err, doc) {
-
-				doc.ip = req.body.ip || res.locals.ip;
-				doc.save();
-
-				// TODO: Validation
+				user.ip = req.body.ip || res.locals.ip;
+				user.save();
 
 				res.sendStatus(204);
 				return res.end();
-			});
-		} catch (err) {
-			res.sendStatus(403);
-			return res.end();
+			} catch (err) {
+				res.sendStatus(403);
+				return res.end();
+			}
+		} else {
+			try {
+				var user = yield users.basicAuth(req, res);
+
+				User.findOne({ email: user }, function (err, doc) {
+
+					doc.ip = req.body.ip || res.locals.ip;
+					doc.save();
+
+					// TODO: Validation
+
+					res.sendStatus(204);
+					return res.end();
+				});
+			} catch (err) {
+				res.sendStatus(403);
+				return res.end();
+			}
 		}
 	} else {
 		var user = yield users.getUser(req, false);
