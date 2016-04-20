@@ -41,6 +41,7 @@ app.use(wrap(function* (req, res, next) {
 
 	res.locals.loggedIn = Boolean(req.session.user.email);
 	res.locals.user = req.session.user;
+	res.locals.errors = {};
 
 	next();
 }));

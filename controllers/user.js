@@ -50,6 +50,40 @@ users.getUser = function(email, password) {
 	});
 };
 
+users.parseErrors = function(err) {
+	errors = {};
+
+	if (err.errors.ip) {
+		errors.ip = 'Invalid IP address';
+	}
+
+	if (err.errors.sub) {
+		if (err.errors.sub.message == 'unique') {
+			errors.sub = 'Subdomain "' + err.errors.sub.value + '" is already taken';
+		} else {
+			errors.sub = 'Invalid subdomain';
+		}
+	}
+
+	if (err.errors.email) {
+		if (err.errors.email.message == 'unique') {
+			errors.email = 'Email address "' + err.errors.email.value + '" is already in use';
+		} else {
+			errors.email = 'Invalid email address';
+		}
+	}
+
+	if (err.errors.password) {
+		if (err.errors.password.message == 'match') {
+			errors.password = 'Passwords do not match';
+		} else {
+			errors.password = 'Password must be at least 6 characters long';
+		}
+	}
+
+	return errors;
+}
+
 users.register = wrap(function*(req, res) {
 	try {
 		res.locals.body = {
@@ -82,34 +116,8 @@ users.register = wrap(function*(req, res) {
 
 		return res.redirect('/');
 	} catch (err) {
-		console.log(err);
-
-		res.locals.errors = {};
-
-		if (err.errors.sub) {
-			if (err.errors.sub.message == 'unique') {
-				res.locals.errors.sub = 'Subdomain "' + err.errors.sub.value + '" is already taken';
-			} else {
-				res.locals.errors.sub = 'Invalid subdomain';
-			}
-		}
-
-		if (err.errors.email) {
-			if (err.errors.email.message == 'unique') {
-				res.locals.errors.email = 'Email address "' + err.errors.email.value + '" is already in use';
-			} else {
-				res.locals.errors.email = 'Invalid email address';
-			}
-		}
-
-		if (err.errors.password) {
-			if (err.errors.password.message == 'match') {
-				res.locals.errors.password = 'Passwords do not match';
-			} else {
-				res.locals.errors.password = 'Password must be at least 6 characters long';
-			}
-		}
-
+		// console.log(err);
+		res.locals.errors = users.parseErrors(err);
 		return pages.register(req, res);
 	}
 });
@@ -134,7 +142,7 @@ users.edit = wrap(function* (req, res) {
 	var user;
 
 	try {
-		user = yield users.getSessionUser(req);
+		user = yield users.checkSession(req);
 	} catch (err) {
 		return res.redirect('/');
 	}
@@ -163,38 +171,7 @@ users.edit = wrap(function* (req, res) {
 
 		return res.redirect('/');
 	} catch (err) {
-		// console.log(err);
-
-		res.locals.errors = {};
-
-		if (err.errors.ip) {
-			res.locals.errors.email = 'Invalid IP address';
-		}
-
-		if (err.errors.sub) {
-			if (err.errors.sub.message == 'unique') {
-				res.locals.errors.sub = 'Subdomain "' + err.errors.sub.value + '" is already taken';
-			} else {
-				res.locals.errors.sub = 'Invalid subdomain';
-			}
-		}
-
-		if (err.errors.email) {
-			if (err.errors.email.message == 'unique') {
-				res.locals.errors.email = 'Email address "' + err.errors.email.value + '" is already in use';
-			} else {
-				res.locals.errors.email = 'Invalid email address';
-			}
-		}
-
-		if (err.errors.password) {
-			if (err.errors.password.message == 'match') {
-				res.locals.errors.password = 'Passwords do not match';
-			} else {
-				res.locals.errors.password = 'Password must be at least 6 characters long';
-			}
-		}
-
+		res.locals.errors = users.parseErrors(err);
 		return pages.home(req, res);
 	}
 });
