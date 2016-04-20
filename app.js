@@ -32,11 +32,13 @@ app.use(wrap(function* (req, res, next) {
 	if (ip.startsWith('::ffff:')) ip = ip.substring(7);
 	res.locals.ip = ip;
 
-	if (users.checkSession(req)) {
-		users.setSession(req, yield users.getUser(req, false));
+	try {
+		users.setSession(req, yield users.checkSession(req));
+	} catch (err) {
+		users.setSession(req);
 	}
 
-	res.locals.loggedIn = users.checkSession(req);
+	res.locals.loggedIn = Boolean(req.session.user);
 	res.locals.user = req.session.user;
 
 	next();

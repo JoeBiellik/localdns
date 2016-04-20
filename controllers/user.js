@@ -10,15 +10,29 @@ var validator = require('email-validator');
 var users = {};
 
 users.setSession = function(req, user) {
-	req.session.user = {
-		email: user.email,
-		sub: user.sub,
-		ip: user.ip
-	};
+	if (user) {
+		req.session.user = {
+			email: user.email,
+			sub: user.sub,
+			ip: user.ip
+		};
+	} else {
+		req.session.user = {};
+	}
 };
 
 users.checkSession = function(req) {
-	return (Boolean(req.session.user) && Boolean(req.session.user.email) && req.session.loggedIn);
+	return new Promise((resolve, reject) => {
+		if (!Boolean(req.session.user) || !Boolean(req.session.user.email)) return reject();
+
+		User.findOne({ email: req.session.user.email }, (err, doc) => {
+			if (!err && doc) {
+				return resolve(doc);
+			} else {
+				return reject();
+			}
+		});
+	});
 };
 
 users.getSessionUser = function(req) {
@@ -51,59 +65,69 @@ users.getUser = function(req, verify) {
 	});
 };
 
-users.registerPost = function(req, res) {
-	var errors = {};
+users.registerPost = wrap(function*(req, res) {
+	try {
+		res.locals.body = {
+			email: req.body.email,
+			sub: req.body.sub
+		};
 
-	if (req.body.password !== req.body.password_confirm) {
-		errors.password_confirm = 'Passwords do not match';
-	}
-
-	if (req.body.password.length < 8) {
-		errors.password = 'Must be at least 8 characters';
-	}
-
-	if (!req.body.sub.match(/^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$/)) {
-		errors.sub = '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash.';
-	}
-
-	if (!validator.validate(req.body.email)) {
-		errors.email = 'Invalid email address';
-	}
-
-	User.count({ email: req.body.email }, function (err, count) {
-		if (!err && count) {
-			errors.email = 'Email address already in use';
+		if (req.body.password || req.body.password_confirm) {
+			if (req.body.password != req.body.password_confirm) throw {
+				message: 'User validation failed',
+				name: 'ValidationError',
+				errors: {
+					password: {
+						message: 'match'
+					}
+				}
+			};
 		}
 
-		User.count({ sub: req.body.sub }, function (err, count) {
-			if (!err && count) {
-				errors.sub = 'Subdomain already in use';
-			}
-
-			if (Object.keys(errors).length) {
-				res.locals.body = {
-					email: req.body.email,
-					sub: req.body.sub
-				};
-				res.locals.errors = errors;
-				return users.register(req, res);
-			} else {
-				var u = new User({
-					email: req.body.email,
-					sub: req.body.sub,
-					ip: res.locals.ip,
-					password: req.body.password
-				});
-
-				u.save();
-
-				req.session.loggedIn = true;
-				users.setSession(req, u);
-				return res.redirect('/');
-			}
+		var user = new User({
+			email: req.body.email,
+			sub: req.body.sub,
+			ip: res.locals.ip,
+			password: req.body.password
 		});
-	});
-};
+
+		yield user.save();
+
+		users.setSession(req, user);
+
+		return res.redirect('/');
+	} catch (err) {
+		console.log(err);
+
+		res.locals.errors = {};
+
+		if (err.errors.sub) {
+			if (err.errors.sub.message == 'unique') {
+				res.locals.errors.sub = 'Subdomain "' + err.errors.sub.value + '" is already taken';
+			} else {
+				res.locals.errors.sub = 'Invalid subdomain';
+			}
+		}
+
+		if (err.errors.email) {
+			if (err.errors.email.message == 'unique') {
+				res.locals.errors.email = 'Email address "' + err.errors.email.value + '" is already in use';
+			} else {
+				res.locals.errors.email = 'Invalid email address';
+			}
+		}
+
+		if (err.errors.password) {
+			if (err.errors.password.message == 'match') {
+				res.locals.errors.password = 'Passwords do not match';
+			} else {
+				res.locals.errors.password = 'Password must be at least 6 characters long';
+			}
+		}
+
+		return users.register(req, res);
+	}
+});
 
 users.register = function(req, res) {
 	if (users.checkSession(req)) return res.redirect('/');
@@ -113,7 +137,7 @@ users.register = function(req, res) {
 
 users.loginPost = wrap(function* (req, res) {
 	try {
-		var user = yield users.getUser(req, false);
+		var user = yield users.getUser(req, true);
 
 		req.session.loggedIn = true;
 		users.setSession(req, user);

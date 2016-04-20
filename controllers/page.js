@@ -72,7 +72,7 @@ exports.homePost = wrap(function* (req, res) {
 				res.locals.errors.password = 'Password must be at least 6 characters long';
 			}
 		}
-	
+
 		return exports.home(req, res);
 	}
 });
