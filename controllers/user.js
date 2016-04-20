@@ -143,38 +143,44 @@ users.logout = function(req, res) {
 	res.redirect('/');
 };
 
-users.update = function(req, res) {
-	var check = users.checkSession(req);
-	
-	if (!check) {
-		var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
-			User.findOne({ email: username }, function (err, doc) {
-				callback(!err && doc && doc.verifyPasswordSync(password));
-			});
+users.basicAuth = finction(req, res) {
+	var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
+		User.findOne({ email: username }, function (err, doc) {
+			callback(!err && doc && doc.verifyPasswordSync(password));
 		});
+	});
 
+	return new Promise((resolve, reject) => {
 		basic.check(req, res, function(reqAuth) {
 			if (!reqAuth.user) {
-				res.sendStatus(403);
-				return res.end();
+				return reject();
 			}
 
+			return resolve(reqAuth.user);
+		});
+	});
+}
+
+users.update = wrap(function* (req, res) {
+	var check = users.checkSession(req);
+
+	if (!check) {
+		try {
+			var user = yield users.basicAuth(req, res);
+
 			User.findOne({ email: reqAuth.user }, function (err, doc) {
-				var ip = req.body.ip || res.locals.ip;
-				var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
-
-				if (!ip.match(matcher)) {
-					res.status(401);
-					return res.send('Invalid IP address');
-				}
-
 				doc.ip = req.body.ip || res.locals.ip;
 				doc.save();
+
+				// TODO: Validation
 
 				res.sendStatus(204);
 				return res.end();
 			});
-		});
+		} catch (err) {
+			res.sendStatus(403);
+			return res.end();
+		}
 	} else {
 		users.getUser(req, false, function (err, user)  {
 			if (err || !user) {
@@ -182,13 +188,7 @@ users.update = function(req, res) {
 				return res.end();
 			}
 
-			var ip = req.body.ip || res.locals.ip;
-			var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
-
-			if (!ip.match(matcher)) {
-				res.status(401);
-				return res.send('Invalid IP address');
-			}
+			// TODO: Validation
 
 			user.ip = req.body.ip || res.locals.ip;
 			user.save();
@@ -197,7 +197,7 @@ users.update = function(req, res) {
 			return res.redirect('/');
 		});
 	}
-};
+});
 
 users.status = function(req, res) {
 	var check = users.checkSession(req);
