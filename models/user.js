@@ -15,7 +15,17 @@ var user = new mongoose.Schema({
 		type: String,
 		unique: true,
 		validate: function(value) {
-			return /^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$/.test(value);
+			if (!/^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$/.test(value)) return false;
+
+			if (!config.subdomainBlacklist) return true;
+
+			for (var key in config.subdomainBlacklist) {
+				if (value == config.subdomainBlacklist[key]) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 	},
 	ip: {
