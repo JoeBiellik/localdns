@@ -33,27 +33,29 @@ app.use(wrap(function* (req, res, next) {
 	res.locals.ip = ip;
 
 	try {
-		users.setSession(req, yield users.checkSession(req));
+		var user = yield users.checkSession(req);
+		users.setSession(req, user);
 	} catch (err) {
 		users.setSession(req);
 	}
 
-	res.locals.loggedIn = Boolean(req.session.user);
+	res.locals.loggedIn = Boolean(req.session.user.email);
 	res.locals.user = req.session.user;
 
 	next();
 }));
 
 app.get('/', pages.home);
-app.post('/', pages.homePost);
+app.post('/', users.edit);
 app.get('/about', pages.about);
-app.get('/register', users.register);
-app.post('/register', users.registerPost);
-app.get('/login', users.login);
-app.post('/login', users.loginPost);
-app.get('/logout', users.logout);
+app.get('/register', pages.register);
+app.post('/register', users.register);
+app.get('/login', pages.login);
+app.post('/login', users.login);
+app.get('/logout', pages.logout);
 app.get('/update', users.update);
 app.post('/update', users.update);
+app.get('/nic/update', users.update);
 app.get('/status.json', users.status);
 
 module.exports = app;

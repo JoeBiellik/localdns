@@ -6,6 +6,7 @@ var auth = require('http-auth');
 var ping = require ('net-ping');
 var User = require('../models/user');
 var validator = require('email-validator');
+var pages = require('./page');
 
 var users = {};
 
@@ -19,6 +20,10 @@ users.setSession = function(req, user) {
 	} else {
 		req.session.user = {};
 	}
+};
+
+users.loggedIn = function(req) {
+	return Boolean(req.session.user) && Boolean(req.session.user.email);
 };
 
 users.checkSession = function(req) {
@@ -65,7 +70,7 @@ users.getUser = function(req, verify) {
 	});
 };
 
-users.registerPost = wrap(function*(req, res) {
+users.register = wrap(function*(req, res) {
 	try {
 		res.locals.body = {
 			email: req.body.email,
@@ -125,42 +130,94 @@ users.registerPost = wrap(function*(req, res) {
 			}
 		}
 
-		return users.register(req, res);
+		return pages.register(req, res);
 	}
 });
 
-users.register = function(req, res) {
-	if (users.checkSession(req)) return res.redirect('/');
-
-	res.render('register', { title: 'Register' });
-};
-
-users.loginPost = wrap(function* (req, res) {
+users.login = wrap(function* (req, res) {
 	try {
 		var user = yield users.getUser(req, true);
 
 		req.session.loggedIn = true;
 		users.setSession(req, user);
 
-		res.redirect('/');
+		return res.redirect('/');
 	} catch (err) {
 		res.locals.errors = { _top: 'Email and password did not match' };
-		users.login(req, res);
+		pages.login(req, res);
 	}
 });
 
-users.login = function(req, res) {
-	if (users.checkSession(req)) return res.redirect('/');
+users.edit = wrap(function* (req, res) {
+	if (!req.body) return res.redirect('/');
 
-	res.render('login', { title: 'Login' });
-};
+	var user;
 
-users.logout = function(req, res) {
-	req.session.loggedIn = false;
-	req.session.user = null;
+	try {
+		user = yield users.getSessionUser(req);
+	} catch (err) {
+		return res.redirect('/');
+	}
 
-	res.redirect('/');
-};
+	try {
+		if (req.body.password || req.body.password_confirm) {
+			if (req.body.password != req.body.password_confirm) throw {
+				message: 'User validation failed',
+				name: 'ValidationError',
+				errors: {
+					password: {
+						message: 'match'
+					}
+				}
+			};
+		}
+
+		if (req.body.ip && req.body.ip != user.ip) user.ip = req.body.ip;
+		if (req.body.sub && req.body.sub != user.sub) user.sub = req.body.sub;
+		if (req.body.email && req.body.email != user.email) user.email = req.body.email;
+		if (req.body.password) user.password = req.body.password;
+
+		yield user.save();
+
+		users.setSession(req, user);
+
+		return res.redirect('/');
+	} catch (err) {
+		// console.log(err);
+
+		res.locals.errors = {};
+
+		if (err.errors.ip) {
+			res.locals.errors.email = 'Invalid IP address';
+		}
+
+		if (err.errors.sub) {
+			if (err.errors.sub.message == 'unique') {
+				res.locals.errors.sub = 'Subdomain "' + err.errors.sub.value + '" is already taken';
+			} else {
+				res.locals.errors.sub = 'Invalid subdomain';
+			}
+		}
+
+		if (err.errors.email) {
+			if (err.errors.email.message == 'unique') {
+				res.locals.errors.email = 'Email address "' + err.errors.email.value + '" is already in use';
+			} else {
+				res.locals.errors.email = 'Invalid email address';
+			}
+		}
+
+		if (err.errors.password) {
+			if (err.errors.password.message == 'match') {
+				res.locals.errors.password = 'Passwords do not match';
+			} else {
+				res.locals.errors.password = 'Password must be at least 6 characters long';
+			}
+		}
+
+		return pages.home(req, res);
+	}
+});
 
 users.basicAuth = function(req, res) {
 	var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
