@@ -1,0 +1,17 @@
+include textbox
+
+mixin edit-form(type, name, placeholder, value, title, pattern, autofocus, addon, error)
+  form(method='post', action='/')
+    if error
+      div.form-group.row.has-danger
+        div.col-sm-9
+          div.input-group
+            +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, null, addon, error)
+        div.col-sm-3
+          button(type='submit').btn.btn-secondary.btn-block Change
+    else
+      div.form-group.row
+        div.input-group.col-sm-9
+          +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, null, addon, error)
+        div.col-sm-3
+          button(type='submit').btn.btn-secondary.btn-block Change
