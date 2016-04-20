@@ -45,6 +45,8 @@
   },
   "dependencies": {
     "body-parser": "^1.15.0",
+    "cidr_match": "0.0.7",
+    "co-express": "^1.2.1",
     "compression": "^1.6.1",
     "config": "^1.16.0",
     "connect-mongo": "^1.1.0",
@@ -52,10 +54,12 @@
     "email-validator": "^1.0.4",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "http-auth": "^2.2.9",
     "jade": "^1.11.0",
     "jstransformer-marked": "^1.0.1",
     "mongoose": "^4.1.12",
     "mongoose-bcrypt": "^1.2.3",
+    "mongoose-unique-validator": "^1.0.2",
     "net-ping": "^1.2.0"
   },
   "devDependencies": {

@@ -1,38 +1,59 @@
 var config = require('config');
+var wrap = require('co-express');
 var dns = require('dns');
 var http = require('http');
-var ping = require ("net-ping");
-var db = require('../db')();
+var auth = require('http-auth');
+var ping = require ('net-ping');
 var User = require('../models/user');
 var validator = require('email-validator');
 
 var users = {};
 
+users.setSession = function(req, user) {
+	req.session.user = {
+		email: user.email,
+		sub: user.sub,
+		ip: user.ip
+	};
+};
+
 users.checkSession = function(req) {
 	return (Boolean(req.session.user) && Boolean(req.session.user.email) && req.session.loggedIn);
 };
 
-users.getUser = function(req, verify, callback) {
-	var email = users.checkSession(req) ? req.session.user.email : req.body.email;
-	if (verify && (!req.body.email || !req.body.password)) callback(true);
+users.getSessionUser = function(req) {
+	return new Promise((resolve, reject) => {
+		if (!users.checkSession(req)) return reject();
 
-	User.findOne({ email: email }, function (err, doc) {
-		if (!err && doc && (!verify || users.checkSession(req) || doc.verifyPasswordSync(req.body.password))) {
-			callback(false, doc);
-		} else {
-			callback(true);
-		}
+		User.findOne({ email: req.session.user.email }, (err, doc) => {
+			if (!err && doc) {
+				return resolve(doc);
+			} else {
+				return reject();
+			}
+		});
 	});
 };
 
-users.setSession = function(req, u) {
-	if (!u) return;
+users.getUser = function(req, verify) {
+	return new Promise((resolve, reject) => {
+		var email = users.checkSession(req) ? req.session.user.email : req.body.email;
 
-	req.session.user = {
-		email: u.email,
-		sub: u.sub,
-		ip: u.ip
-	};
+		if (verify && (!req.body.email || !req.body.password)) return reject();
+
+		User.findOne({ email: email }, function (err, doc) {
+			if (!err && doc && (!verify || users.checkSession(req) || doc.verifyPasswordSync(req.body.password))) {
+				console.log('resolve');
+				return resolve(doc);
+			} else {
+				console.log('reject');
+				console.log(err);
+				console.log(doc);
+				console.log(verify);
+				return reject();
+			}
+		});
+	});
 };
 
 users.registerPost = function(req, res) {
@@ -67,7 +88,7 @@ users.registerPost = function(req, res) {
 			if (Object.keys(errors).length) {
 				res.locals.body = {
 					email: req.body.email,
-					sub: req.body.sub,
+					sub: req.body.sub
 				};
 				res.locals.errors = errors;
 				return users.register(req, res);
@@ -90,73 +111,92 @@ users.registerPost = function(req, res) {
 };
 
 users.register = function(req, res) {
+	if (users.checkSession(req)) return res.redirect('/');
+
 	res.render('register', { title: 'Register' });
 };
 
-users.loginPost = function(req, res) {
-	users.getUser(req, true, function (err, u) {
-		if (!err && u) {
-			req.session.loggedIn = true;
-			users.setSession(req, u);
+users.loginPost = wrap(function* (req, res) {
+	try {
+		var user = yield users.getUser(req, false);
 
-			return res.redirect('/');
-		} else {
-			res.locals.errors = { _top: 'Email and password did not match' };
-			users.login(req, res);
-		}
-	});
-}
+		req.session.loggedIn = true;
+		users.setSession(req, user);
+
+		res.redirect('/');
+	} catch (err) {
+		res.locals.errors = { _top: 'Email and password did not match' };
+		users.login(req, res);
+	}
+});
 
 users.login = function(req, res) {
-	if (users.checkSession(req)) {
-		return res.redirect('/');
-	} else {
-		res.render('login', { title: 'Login' });
-	}
+	if (users.checkSession(req)) return res.redirect('/');
+
+	res.render('login', { title: 'Login' });
 };
 
 users.logout = function(req, res) {
 	req.session.loggedIn = false;
 	req.session.user = null;
 
-	return res.redirect('/');
+	res.redirect('/');
 };
 
 users.update = function(req, res) {
 	var check = users.checkSession(req);
-	var email = check ? req.session.user.email : req.body.email;
+	
+	if (!check) {
+		var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
+			User.findOne({ email: username }, function (err, doc) {
+				callback(!err && doc && doc.verifyPasswordSync(password));
+			});
+		});
 
-	if (!email) {
-		res.status(401);
-		return res.send('Invalid email address');
-	}
+		basic.check(req, res, function(reqAuth) {
+			if (!reqAuth.user) {
+				res.sendStatus(403);
+				return res.end();
+			}
 
-	var ip = req.body.ip || res.locals.ip;
-	var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
+			User.findOne({ email: reqAuth.user }, function (err, doc) {
+				var ip = req.body.ip || res.locals.ip;
+				var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
 
-	if (!ip.match(matcher)) {
-		res.status(401);
-		return res.send('Invalid IP address');
-	}
+				if (!ip.match(matcher)) {
+					res.status(401);
+					return res.send('Invalid IP address');
+				}
 
-	users.getUser(req, false, function (err, u)  {
-		if (err || !u) {
-			res.sendStatus(403);
-			return res.end();
-		}
+				doc.ip = req.body.ip || res.locals.ip;
+				doc.save();
 
-		u.ip = req.body.ip || res.locals.ip;
-		u.save();
+				res.sendStatus(204);
+				return res.end();
+			});
+		});
+	} else {
+		users.getUser(req, false, function (err, user)  {
+			if (err || !user) {
+				res.sendStatus(403);
+				return res.end();
+			}
 
-		users.setSession(req, u);
+			var ip = req.body.ip || res.locals.ip;
+			var matcher = /^(?:(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)\.){3}(?:2[0-4]\d|25[0-5]|1\d{2}|[1-9]?\d)$/;
 
-		if (check) {
+			if (!ip.match(matcher)) {
+				res.status(401);
+				return res.send('Invalid IP address');
+			}
+
+			user.ip = req.body.ip || res.locals.ip;
+			user.save();
+			users.setSession(req, user);
+
 			return res.redirect('/');
-		} else {
-			res.sendStatus(204);
-			return res.end();
-		}
-	});
+		});
+	}
 };
 
 users.status = function(req, res) {
@@ -195,7 +235,7 @@ users.status = function(req, res) {
 			};
 		}
 
-		ping.createSession({ retries: 0, timeout: 1000 }).pingHost((result.dns.error || result.dns.result != req.session.user.ip) ? req.session.user.ip : req.session.user.sub + '.' + config.domain, function(error, target) {
+		ping.createSession({ retries: 0, timeout: 1000 }).pingHost((result.dns.error || result.dns.result != req.session.user.ip) ? req.session.user.ip : req.session.user.sub + '.' + config.domain, function(error) {
 			if (!error) {
 				result.ping.error = false;
 			}
@@ -213,7 +253,7 @@ users.status = function(req, res) {
 
 				res.json(result);
 				return res.end();
-			}).on('error', (e) => {
+			}).on('error', () => {
 				res.json(result);
 				return res.end();
 			});
