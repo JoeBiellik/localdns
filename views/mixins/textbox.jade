@@ -1,0 +1,6 @@
+mixin textbox(type, name, placeholder, title, pattern, required, addon, error)
+  input(type=type, name=name, placeholder=placeholder, value=value, title=title, pattern=pattern, required=required).form-control.form-control-danger
+  if addon
+    span.input-group-addon #{addon}
+  if error
+    div.alert.alert-danger #{error}

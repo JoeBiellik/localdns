@@ -8,6 +8,8 @@ block nav
   li.nav-item
     a(href='/about').nav-link About
 
+include ./mixins/textbox
+
 block content
   section.jumbotron.p-a-3
     form(method='post', action='/register').text-md-left
@@ -29,15 +31,14 @@ block content
       else
         div.form-group
           input(type='email', placeholder='Email Address', name='email', value=(body && body.email), required)#inputEmail.form-control.form-control-lg
-        
+
       if errors && errors.password
-        div.form-group.has-danger
-          input(type='password', placeholder='Password', name='password', title='Minimum 8 characters', pattern='^.{8,}$', required)#inputPassword.form-control.form-control-lg.form-control-danger
-          div.alert.alert-danger #{errors.password}
+        div.form-group.input-group-lg.has-danger
+          +textbox('password', 'password', 'Password', 'Minimum 8 characters', '^.{8,}$', 'required', false, errors.password)
       else
-        div.form-group
-          input(type='password', placeholder='Password', name='password', title='Minimum 8 characters', pattern='^.{8,}$', required)#inputPassword.form-control.form-control-lg
-        
+        div.form-group.input-group-lg
+          +textbox('password', 'password', 'Password', 'Minimum 8 characters', '^.{8,}$', 'required', false, false)
+
       if errors && errors.password_confirm
         div.form-group.has-danger
           input(type='password', placeholder='Password Confirm', name='password_confirm', title='Minimum 8 characters', pattern='^.{8,}$', required)#inputPasswordConfirm.form-control.form-control-lg.form-control-danger
