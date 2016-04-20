@@ -1,0 +1,19 @@
+include textbox
+
+mixin register-textbox(type, name, placeholder, title, pattern, autofocus, addon, error)
+  if addon
+    if error
+      div.form-group.input-group-lg.has-danger
+        div.input-group
+          +textbox(type, name, placeholder, title, pattern, 'required', autofocus, addon, error)
+    else
+      div.form-group.input-group-lg
+        div.input-group
+          +textbox(type, name, placeholder, title, pattern, 'required', autofocus, addon, false)
+  else
+    if error
+      div.form-group.input-group-lg.has-danger
+        +textbox(type, name, placeholder, title, pattern, 'required', autofocus, addon, error)
+    else
+      div.form-group.input-group-lg
+        +textbox(type, name, placeholder, title, pattern, 'required', autofocus, addon, false)
