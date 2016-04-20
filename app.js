@@ -1,5 +1,6 @@
 var express = require('express');
 var config = require('config');
+var wrap = require('co-express');
 var db = require('./db')();
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
@@ -26,15 +27,20 @@ app.use(session({
 	store: new MongoStore({ mongooseConnection: db })
 }));
 
-app.use(function (req, res, next) {
+app.use(wrap(function* (req, res, next) {
 	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	if (ip.startsWith('::ffff:')) ip = ip.substring(7);
 	res.locals.ip = ip;
+
+	if (users.checkSession(req)) {
+		users.setSession(req, yield users.getUser(req, false));
+	}
+
 	res.locals.loggedIn = users.checkSession(req);
 	res.locals.user = req.session.user;
 
 	next();
-});
+}));
 
 app.get('/', pages.home);
 app.post('/', pages.homePost);
