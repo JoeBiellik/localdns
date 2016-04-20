@@ -43,13 +43,8 @@ users.getUser = function(req, verify) {
 
 		User.findOne({ email: email }, function (err, doc) {
 			if (!err && doc && (!verify || users.checkSession(req) || doc.verifyPasswordSync(req.body.password))) {
-				console.log('resolve');
 				return resolve(doc);
 			} else {
-				console.log('reject');
-				console.log(err);
-				console.log(doc);
-				console.log(verify);
 				return reject();
 			}
 		});
@@ -143,7 +138,7 @@ users.logout = function(req, res) {
 	res.redirect('/');
 };
 
-users.basicAuth = finction(req, res) {
+users.basicAuth = function(req, res) {
 	var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
 		User.findOne({ email: username }, function (err, doc) {
 			callback(!err && doc && doc.verifyPasswordSync(password));
@@ -169,6 +164,7 @@ users.update = wrap(function* (req, res) {
 			var user = yield users.basicAuth(req, res);
 
 			User.findOne({ email: user }, function (err, doc) {
+
 				doc.ip = req.body.ip || res.locals.ip;
 				doc.save();
 
@@ -182,29 +178,20 @@ users.update = wrap(function* (req, res) {
 			return res.end();
 		}
 	} else {
-		users.getUser(req, false, function (err, user)  {
-			if (err || !user) {
-				res.sendStatus(403);
-				return res.end();
-			}
+		var user = yield users.getUser(req, false);
+		user.ip = req.body.ip || res.locals.ip;
+		user.save();
 
-			// TODO: Validation
+		users.setSession(req, user);
 
-			user.ip = req.body.ip || res.locals.ip;
-			user.save();
-			users.setSession(req, user);
-
-			return res.redirect('/');
-		});
+		return res.redirect('/');
 	}
 });
 
 users.status = function(req, res) {
-	var check = users.checkSession(req);
-
 	res.set('Cache-Control', 'no-cache');
 
-	if (!check) {
+	if (!users.checkSession(req)) {
 		res.sendStatus(403);
 		return res.end();
 	}
@@ -251,14 +238,16 @@ users.status = function(req, res) {
 					result: httpRes.statusCode
 				};
 
+				clearTimeout(timeout);
 				res.json(result);
 				return res.end();
 			}).on('error', () => {
+				clearTimeout(timeout);
 				res.json(result);
 				return res.end();
 			});
 
-			request.setTimeout(1000, function() {
+			var timeout = request.setTimeout(1000, () => {
 				res.json(result);
 				return res.end();
 			});
