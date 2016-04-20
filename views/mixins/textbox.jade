@@ -1,4 +1,4 @@
-mixin textbox(type, name, placeholder, title, pattern, required, autofocus, addon, error)
+mixin textbox(type, name, placeholder, value, title, pattern, required, autofocus, addon, error)
   input(type=type, name=name, placeholder=placeholder, value=value, title=title, pattern=pattern, required=required, autofocus=autofocus).form-control.form-control-lg
   if addon
     span.input-group-addon #{addon}

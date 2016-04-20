@@ -14,9 +14,9 @@ include ./mixins/register-textbox
 block content
   section.jumbotron.p-a-3
     form(method='post', action='/register').text-md-left
-      +register-textbox('text', 'sub', 'Subdomain', '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', '^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', 'autofocus', '.' + domain, errors.email)
-      +register-textbox('email', 'email', 'Email Address', null, null, null, false, errors.email)
-      +register-textbox('password', 'password', 'Password', 'Minimum 8 characters', '^.{8,}$', null, false, errors.password)
-      +register-textbox('password', 'password_confirm', 'Password Confirm', 'Minimum 8 characters', '^.{8,}$', null, false, errors.password_confirm)
+      +register-textbox('text', 'sub', 'Subdomain', (body && body.sub), '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', '^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', 'autofocus', '.' + domain, errors.email)
+      +register-textbox('email', 'email', 'Email Address', (body && body.email), null, null, null, false, errors.email)
+      +register-textbox('password', 'password', 'Password', null, 'Minimum 8 characters', '^.{8,}$', null, false, errors.password)
+      +register-textbox('password', 'password_confirm', 'Password Confirm', null, 'Minimum 8 characters', '^.{8,}$', null, false, errors.password_confirm)
 
       button(type='submit').btn.btn-lg.btn-primary.btn-block Register
