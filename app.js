@@ -56,7 +56,7 @@ app.post('/login', users.login);
 app.get('/logout', pages.logout);
 app.get('/update', users.update);
 app.post('/update', users.update);
-app.get('/nic/update', users.update);
+app.get('/nic/update', users.nic);
 app.get('/status.json', users.status);
 
 module.exports = app;

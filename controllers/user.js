@@ -215,7 +215,6 @@ users.update = wrap(function* (req, res) {
 				var user = yield users.basicAuth(req, res);
 
 				User.findOne({ email: user }, function (err, doc) {
-
 					doc.ip = req.body.ip || res.locals.ip;
 					doc.save();
 
@@ -237,6 +236,37 @@ users.update = wrap(function* (req, res) {
 		users.setSession(req, user);
 
 		return res.redirect('/');
+	}
+});
+
+users.nic = wrap(function* (req, res) {
+	try {
+		var user = yield users.basicAuth(req, res);
+
+		User.findOne({ email: user }, function (err, doc) {
+			if (req.query && req.query.hostname && req.query.myip) {
+				if (doc.sub + '.' + config.domain != req.query.hostname) {
+					res.send('nohost');
+					return res.end();
+				} else {
+					if (doc.ip == req.query.myip) {
+						res.send('nochg ' + doc.ip);
+						return res.end();
+					} else {
+						doc.ip = req.query.myip;
+						doc.save();
+						res.send('good ' + doc.ip);
+						return res.end();
+					}
+				}
+			} else {
+				res.sendStatus(401);
+				return res.end();
+			}
+		});
+	} catch (err) {
+		res.send('badauth');
+		return res.end();
 	}
 });
 
