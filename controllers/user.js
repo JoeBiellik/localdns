@@ -177,7 +177,7 @@ users.edit = wrap(function* (req, res) {
 
 users.basicAuth = function(req, res) {
 	var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
-		User.findOne({ email: username }, function (err, doc) {
+		User.findOne({ email: decodeURIComponent(username) }, function (err, doc) {
 			callback(!err && doc && doc.verifyPasswordSync(password));
 		});
 	});
@@ -243,7 +243,7 @@ users.nic = wrap(function* (req, res) {
 	try {
 		var user = yield users.basicAuth(req, res);
 
-		User.findOne({ email: user }, function (err, doc) {
+		User.findOne({ email: decodeURIComponent(user) }, function (err, doc) {
 			if (req.query && req.query.hostname && req.query.myip) {
 				if (doc.sub + '.' + config.domain != req.query.hostname) {
 					res.send('nohost');
