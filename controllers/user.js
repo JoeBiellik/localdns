@@ -242,18 +242,19 @@ users.update = wrap(function* (req, res) {
 users.nic = wrap(function* (req, res) {
 	try {
 		var user = yield users.basicAuth(req, res);
+		var ip = req.query.myip || res.locals.ip;
 
 		User.findOne({ email: decodeURIComponent(user) }, function (err, doc) {
-			if (req.query && req.query.hostname && req.query.myip) {
+			if (req.query && req.query.hostname) {
 				if (doc.sub + '.' + config.domain != req.query.hostname) {
 					res.send('nohost');
 					return res.end();
 				} else {
-					if (doc.ip == req.query.myip) {
+					if (doc.ip == ip) {
 						res.send('nochg ' + doc.ip);
 						return res.end();
 					} else {
-						doc.ip = req.query.myip;
+						doc.ip = ip;
 						doc.save();
 						res.send('good ' + doc.ip);
 						return res.end();
