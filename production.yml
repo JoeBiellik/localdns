@@ -4,13 +4,13 @@ services:
     command: "npm start"
     restart: always
     environment:
-     - NODE_ENV=docker
+     - NODE_ENV=production
     ports:
      - "80:80"
   dns:
     command: "npm run dns-server"
     restart: always
     environment:
-     - NODE_ENV=docker
+     - NODE_ENV=production
   db:
     restart: always

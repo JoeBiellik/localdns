@@ -70,7 +70,7 @@ URL: /nic/update?hostname=
 ## Deployment
 1. Create DNS glue records for `ns1.your.domain` with your domain registrar pointing to your server's IP address and register it as the domain's nameserver.
 
-2. Configure `config/docker.json` with your domain, server IP and any custom records and settings
+2. Configure `config/production.json` with your domain, server IP and any custom records and settings
 
 3. Make sure your server's firewall allows external DNS traffic on port 53 TCP and UDP
 
