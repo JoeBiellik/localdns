@@ -15,7 +15,7 @@ You can simply login to the website and manage your subdomain and IP address the
 ### Cron
 The easiest way to keep your mapping up to date is to add the following to your crontab which will update your IP every three hours:
 ```
-0 */3 * * * curl -u 'EMAIL:PASSWORD' https://localdns.in/update
+0 */3 * * * curl -u 'USERNAME:PASSWORD' https://localdns.in/update
 ```
 
 ### ddclient
@@ -23,13 +23,21 @@ You can use [ddclient](https://github.com/wimpunk/ddclient) to keep your IP addr
 ```
 server=localdns.in, \
 protocol=dyndns2,   \
-login=EMAIL,        \
+login=USERNAME,     \
 password=PASSWORD   \
 SUBDOMAIN.localdns.in
 ```
 
-### Router
-Comparable routers can directly update your IP address...
+### DD-WRT
+DD-WRT routers can directly update your IP address by using their built in dynamic DNS updater. Other routers may also work.
+```
+DDNS Service: Custom
+DYNDNS Server: localdns.in
+Username: USERNAME
+Password: PASSWORD
+Hostname: SUBDOMAIN.localdns.in
+URL: /nic/update?hostname=
+```
 
 ## Development
 1. Clone this repo:
