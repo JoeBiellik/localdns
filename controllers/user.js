@@ -170,6 +170,11 @@ users.edit = wrap(function* (req, res) {
 
 		return res.redirect('/');
 	} catch (err) {
+		res.locals.body = {
+			username: req.body.username,
+			sub: req.body.sub
+		};
+
 		res.locals.errors = users.parseErrors(err);
 		return pages.home(req, res);
 	}
@@ -194,9 +199,7 @@ users.basicAuth = function(req, res) {
 }
 
 users.update = wrap(function* (req, res) {
-	var check = users.checkSession(req);
-
-	if (!check) {
+	if (!users.checkSession(req)) {
 		if (req.body.username && req.body.password) {
 			try {
 				var user = yield users.getUser(req.body.username, req.body.password);
@@ -216,12 +219,14 @@ users.update = wrap(function* (req, res) {
 
 				User.findOne({ username: user }, function (err, doc) {
 					doc.ip = req.body.ip || res.locals.ip;
-					doc.save();
-
-					// TODO: Validation
-
-					res.sendStatus(204);
-					return res.end();
+					try {
+						doc.save();
+						res.sendStatus(204);
+						return res.end();
+					} catch (e) {
+						res.sendStatus(401);
+						return res.end();
+					}
 				});
 			} catch (err) {
 				res.sendStatus(403);
@@ -231,11 +236,14 @@ users.update = wrap(function* (req, res) {
 	} else {
 		var user = yield users.getUser(req, false);
 		user.ip = req.body.ip || res.locals.ip;
-		user.save();
-
-		users.setSession(req, user);
-
-		return res.redirect('/');
+		try {
+			user.save();
+			users.setSession(req, user);
+			return res.redirect('/');
+		} catch (e) {
+			res.sendStatus(401);
+			return res.end();
+		}
 	}
 });
 
