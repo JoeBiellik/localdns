@@ -1,7 +1,7 @@
 var config = require('config');
 var dnsd = require('dnsd');
-var db = require('./db')();
 var User = require('./models/user');
+require('./db')();
 
 var server = dnsd.createServer(function(req, res) {
 	var question = res.question && res.question[0];

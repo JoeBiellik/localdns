@@ -23,7 +23,7 @@ users.setSession = function(req, user) {
 
 users.checkSession = function(req) {
 	return new Promise((resolve, reject) => {
-		if (!Boolean(req.session.user) || !Boolean(req.session.user.username)) return reject();
+		if (!req.session.user || !req.session.user.username) return reject();
 
 		User.findOne({ username: req.session.user.username }, (err, doc) => {
 			if (!err && doc) {
@@ -37,7 +37,7 @@ users.checkSession = function(req) {
 
 users.getUser = function(username, password) {
 	return new Promise((resolve, reject) => {
-		if (!Boolean(username) || !Boolean(password)) return reject();
+		if (!username || !password) return reject();
 
 		User.findOne({ username: username }, (err, doc) => {
 			if (!err && doc && doc.verifyPasswordSync(password)) {
@@ -50,7 +50,7 @@ users.getUser = function(username, password) {
 };
 
 users.parseErrors = function(err) {
-	errors = {};
+	var errors = {};
 
 	if (!err.errors) return errors;
 
@@ -335,7 +335,7 @@ users.status = function(req, res) {
 				res.json(result);
 				return res.end();
 			}).on('error', () => {
-					res.json(result);
+				res.json(result);
 				return res.end();
 			});
 
