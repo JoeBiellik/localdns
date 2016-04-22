@@ -304,16 +304,19 @@ users.status = function(req, res) {
 			};
 		}
 
-		ping.createSession({ retries: 0, timeout: 1000 }).pingHost((result.dns.error || result.dns.result != req.session.user.ip) ? req.session.user.ip : req.session.user.sub + '.' + config.domain, function(error) {
+		ping.createSession({ retries: 0, timeout: 1000 }).pingHost(req.session.user.ip, function(error) {
 			if (!error) {
 				result.ping.error = false;
 			}
 
 			var request = http.get({
-				hostname: (result.dns.error || result.dns.result != req.session.user.ip) ? req.session.user.ip : req.session.user.sub + '.' + config.domain,
+				hostname: req.session.user.ip,
 				port: 80,
 				path: '/',
-				agent: false
+				agent: false,
+				headers: {
+					host: req.session.user.sub + '.' + config.domain					
+				}
 			}, (httpRes) => {
 				result.http = {
 					error: false,
