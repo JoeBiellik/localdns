@@ -2,9 +2,9 @@ include ../mixins/edit-form
 
 section.m-t-2.p-t-2.text-sm-center
   h3
-    a(href='http://#{user.sub}.#{domain}')#domain #{user.sub}.#{domain}
+    a(href='http://#{user.sub}.#{domain}', target='_blank')#domain #{user.sub}.#{domain}
     |  currently points to 
-    a(href='http://#{user.ip}')#ip #{user.ip}
+    a(href='http://#{user.ip}', target='_blank')#ip #{user.ip}
 
 section.m-t-3.m-x-1.m-b-3
   form(method='post', action='/')
