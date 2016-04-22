@@ -1,14 +1,13 @@
 var mongoose = require('mongoose');
 var config = require('config');
-var email = require('email-validator');
 var cidr = require('cidr_match');
 
 var user = new mongoose.Schema({
-	email: {
+	username: {
 		type: String,
 		unique: true,
 		validate: function(value) {
-			return email.validate(value);
+			return /^[a-z0-9][a-z0-9_-]{0,62}$/.test(value);
 		}
 	},
 	sub: {

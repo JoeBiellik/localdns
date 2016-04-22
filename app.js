@@ -39,7 +39,7 @@ app.use(wrap(function* (req, res, next) {
 		users.setSession(req);
 	}
 
-	res.locals.loggedIn = Boolean(req.session.user.email);
+	res.locals.loggedIn = Boolean(req.session.user.username);
 	res.locals.user = req.session.user;
 	res.locals.errors = {};
 

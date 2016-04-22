@@ -5,7 +5,6 @@ var http = require('http');
 var auth = require('http-auth');
 var ping = require ('net-ping');
 var User = require('../models/user');
-var validator = require('email-validator');
 var pages = require('./page');
 
 var users = {};
@@ -13,7 +12,7 @@ var users = {};
 users.setSession = function(req, user) {
 	if (user) {
 		req.session.user = {
-			email: user.email,
+			username: user.username,
 			sub: user.sub,
 			ip: user.ip
 		};
@@ -24,9 +23,9 @@ users.setSession = function(req, user) {
 
 users.checkSession = function(req) {
 	return new Promise((resolve, reject) => {
-		if (!Boolean(req.session.user) || !Boolean(req.session.user.email)) return reject();
+		if (!Boolean(req.session.user) || !Boolean(req.session.user.username)) return reject();
 
-		User.findOne({ email: req.session.user.email }, (err, doc) => {
+		User.findOne({ username: req.session.user.username }, (err, doc) => {
 			if (!err && doc) {
 				return resolve(doc);
 			} else {
@@ -36,11 +35,11 @@ users.checkSession = function(req) {
 	});
 };
 
-users.getUser = function(email, password) {
+users.getUser = function(username, password) {
 	return new Promise((resolve, reject) => {
-		if (!Boolean(email) || !Boolean(password)) return reject();
+		if (!Boolean(username) || !Boolean(password)) return reject();
 
-		User.findOne({ email: email }, (err, doc) => {
+		User.findOne({ username: username }, (err, doc) => {
 			if (!err && doc && doc.verifyPasswordSync(password)) {
 				return resolve(doc);
 			} else {
@@ -65,11 +64,11 @@ users.parseErrors = function(err) {
 		}
 	}
 
-	if (err.errors.email) {
-		if (err.errors.email.message == 'unique') {
-			errors.email = 'Email address "' + err.errors.email.value + '" is already in use';
+	if (err.errors.username) {
+		if (err.errors.username.message == 'unique') {
+			errors.username = 'Username "' + err.errors.username.value + '" is already in use';
 		} else {
-			errors.email = 'Invalid email address';
+			errors.username = 'Invalid username';
 		}
 	}
 
@@ -87,7 +86,7 @@ users.parseErrors = function(err) {
 users.register = wrap(function*(req, res) {
 	try {
 		res.locals.body = {
-			email: req.body.email,
+			username: req.body.username,
 			sub: req.body.sub
 		};
 
@@ -104,7 +103,7 @@ users.register = wrap(function*(req, res) {
 		}
 
 		var user = new User({
-			email: req.body.email,
+			username: req.body.username,
 			sub: req.body.sub,
 			ip: res.locals.ip,
 			password: req.body.password
@@ -123,13 +122,13 @@ users.register = wrap(function*(req, res) {
 
 users.login = wrap(function* (req, res) {
 	try {
-		var user = yield users.getUser(req.body.email, req.body.password);
+		var user = yield users.getUser(req.body.username, req.body.password);
 
 		users.setSession(req, user);
 
 		return res.redirect('/');
 	} catch (err) {
-		res.locals.errors = { _top: 'Email and password did not match' };
+		res.locals.errors = { _top: 'Username and password did not match' };
 		pages.login(req, res);
 	}
 });
@@ -160,7 +159,7 @@ users.edit = wrap(function* (req, res) {
 
 		if (req.body.ip && req.body.ip != user.ip) user.ip = req.body.ip;
 		if (req.body.sub && req.body.sub != user.sub) user.sub = req.body.sub;
-		if (req.body.email && req.body.email != user.email) user.email = req.body.email;
+		if (req.body.username && req.body.username != user.username) user.username = req.body.username;
 		if (req.body.password) user.password = req.body.password;
 
 		yield user.save();
@@ -176,7 +175,7 @@ users.edit = wrap(function* (req, res) {
 
 users.basicAuth = function(req, res) {
 	var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
-		User.findOne({ email: decodeURIComponent(username) }, function (err, doc) {
+		User.findOne({ username: decodeURIComponent(username) }, function (err, doc) {
 			callback(!err && doc && doc.verifyPasswordSync(password));
 		});
 	});
@@ -196,9 +195,9 @@ users.update = wrap(function* (req, res) {
 	var check = users.checkSession(req);
 
 	if (!check) {
-		if (req.body.email && req.body.password) {
+		if (req.body.username && req.body.password) {
 			try {
-				var user = yield users.getUser(req.body.email, req.body.password);
+				var user = yield users.getUser(req.body.username, req.body.password);
 
 				user.ip = req.body.ip || res.locals.ip;
 				user.save();
@@ -213,7 +212,7 @@ users.update = wrap(function* (req, res) {
 			try {
 				var user = yield users.basicAuth(req, res);
 
-				User.findOne({ email: user }, function (err, doc) {
+				User.findOne({ username: user }, function (err, doc) {
 					doc.ip = req.body.ip || res.locals.ip;
 					doc.save();
 
@@ -243,7 +242,7 @@ users.nic = wrap(function* (req, res) {
 		var user = yield users.basicAuth(req, res);
 		var ip = req.query.myip || res.locals.ip;
 
-		User.findOne({ email: decodeURIComponent(user) }, function (err, doc) {
+		User.findOne({ username: decodeURIComponent(user) }, function (err, doc) {
 			if (req.query && req.query.hostname) {
 				if (doc.sub + '.' + config.domain != req.query.hostname) {
 					res.send('nohost');
