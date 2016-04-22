@@ -116,7 +116,6 @@ users.register = wrap(function*(req, res) {
 
 		return res.redirect('/');
 	} catch (err) {
-		// console.log(err);
 		res.locals.errors = users.parseErrors(err);
 		return pages.register(req, res);
 	}

@@ -5,15 +5,15 @@
 
 Tiny [Node.js](https://nodejs.org/) dynamic DNS service built with [dnsd](https://www.npmjs.com/package/dnsd), [Express.js](http://expressjs.com/), [MongoDB](https://www.mongodb.org/), [Jade](http://jade-lang.com/) and [Bootstrap 4](http://v4-alpha.getbootstrap.com/).
 
-The app consists of two parts; a web frontend with registration, login and IP address mapping and a tiny DNS server which serves records from the database.
+The app consists of two parts: a web frontend with registration, login and IP address mapping; and a tiny DNS server which serves records from a database.
 
 > Use it for free at [localdns.in](http://localdns.in/)
 
 ## Usage
-You can simply login to the website and manage your subdomain and IP address there or you can use the simple HTTP API to update your IP in a script or dynamic DNS client.
+You can simply login to the website and manage your subdomain and IP address there or you can use the simple HTTP API to update your IP with a script or dynamic DNS client.
 
 ### Cron
-The easiest way to keep your mapping up to date is to add the following to your crontab which will update your IP every three hours:
+The easiest way to keep your mapping up to date is to add the following line to your crontab which will update your IP every three hours:
 ```
 0 */3 * * * curl -u 'USERNAME:PASSWORD' https://localdns.in/update
 ```
@@ -70,7 +70,7 @@ URL: /nic/update?hostname=
 ## Deployment
 1. Create DNS glue records for `ns1.your.domain` with your domain registrar pointing to your server's IP address and register it as the domain's nameserver.
 
-2. Configure `config/production.json` with your domain, server IP and any custom records and settings
+2. Configure `config/docker.json` with your domain, server IP and any custom records and settings
 
 3. Make sure your server's firewall allows external DNS traffic on port 53 TCP and UDP
 
