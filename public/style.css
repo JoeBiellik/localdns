@@ -18,6 +18,10 @@ header {
 	border-bottom: 1px solid #e5e5e5;
 }
 
+h2 {
+	margin: 1rem 0;
+}
+
 li.nav-item.active a.nav-link {
 	color: #373a3c;
 }
@@ -66,7 +70,7 @@ pre code {
 	display: block;
 }
 
-h1#localdns, h1#localdns + p a {
+h1#localdns, h1#localdns + p a, section blockquote {
 	display: none;
 }
 
