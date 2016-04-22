@@ -8,17 +8,16 @@ block nav
   li.nav-item
     a(href='/about').nav-link About
 
+include ./mixins/register-textbox
+
 block content
   section.jumbotron.p-a-3
     form(method='post', action='/login').text-md-left
       if errors && errors._top
         div.alert.alert-danger
           p #{errors._top}
-
-      div.form-group
-        input(type='text', placeholder='Username', name='username', required, autofocus).form-control.form-control-lg
-
-      div.form-group
-        input(type='password', placeholder='Password', name='password', required).form-control.form-control-lg
+          
+      +register-textbox('text', 'username', 'Username', (body && body.username), '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash or underscore', '^[a-z0-9][a-z0-9_-]{0,62}$', 'autofocus', false, null)
+      +register-textbox('password', 'password', 'Password', null, 'Minimum 8 characters', '^.{8,}$', null, false, null)
 
       button(type='submit').btn.btn-lg.btn-primary.btn-block Login
