@@ -8,9 +8,9 @@ section.m-t-2.p-t-2.text-sm-center
 
 section.m-t-3.m-x-1.m-b-3
   form(method='post', action='/')
-      if errors && errors.ip
-        div.alert.alert-danger
-          p #{errors.ip}
+    if errors && errors.ip
+      div.alert.alert-danger
+        p #{errors.ip}
 
     div.row
       div.col-sm-9
