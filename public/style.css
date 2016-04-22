@@ -33,6 +33,10 @@ li.nav-item.active a.nav-link {
 	margin-top: 2.5rem;
 }
 
+[data-toggle="tooltip"] {
+	cursor: help;
+}
+
 .form-group.has-danger .form-control {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
