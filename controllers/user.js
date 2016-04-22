@@ -53,7 +53,7 @@ users.parseErrors = function(err) {
 	errors = {};
 
 	if (err.errors.ip) {
-		errors.ip = 'Invalid IP address';
+		errors.ip = 'Invalid IPv4 address';
 	}
 
 	if (err.errors.sub) {

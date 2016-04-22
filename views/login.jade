@@ -12,12 +12,13 @@ block content
   section.jumbotron.p-a-3
     form(method='post', action='/login').text-md-left
       if errors && errors._top
-        div.alert.alert-danger #{errors._top}
-        
+        div.alert.alert-danger
+          p #{errors._top}
+
       div.form-group
         input(type='text', placeholder='Username', name='username', required, autofocus).form-control.form-control-lg
 
       div.form-group
         input(type='password', placeholder='Password', name='password', required).form-control.form-control-lg
-        
+
       button(type='submit').btn.btn-lg.btn-primary.btn-block Login

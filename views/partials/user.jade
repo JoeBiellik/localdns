@@ -8,6 +8,10 @@ section.m-t-2.p-t-2.text-sm-center
 
 section.m-t-3.m-x-1.m-b-3
   form(method='post', action='/')
+      if errors && errors.ip
+        div.alert.alert-danger
+          p #{errors.ip}
+
     div.row
       div.col-sm-9
         input(type='text', value=ip != user.ip ? ip : '', placeholder='IP Address', name='ip', title='Valid IPv4 address', pattern='^(?:(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)\\.){3}(?:2[0-4]\\d|25[0-5]|1\\d{2}|[1-9]?\\d)$', required, autofocus).form-control.form-control-lg
