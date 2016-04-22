@@ -5,7 +5,8 @@ mixin register-textbox(type, name, placeholder, value, title, pattern, autofocus
     if error
       div.form-group.input-group-lg.has-danger
         div.input-group
-          +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, 'form-control-lg', addon, error)
+          +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, 'form-control-lg', addon, null)
+        div.alert.alert-danger #{error}
     else
       div.form-group.input-group-lg
         div.input-group
