@@ -76,7 +76,7 @@ users.parseErrors = function(err) {
 		if (err.errors.password.message == 'match') {
 			errors.password = 'Passwords do not match';
 		} else {
-			errors.password = 'Password must be at least 6 characters long';
+			errors.password = 'Password must be at least 8 characters long';
 		}
 	}
 

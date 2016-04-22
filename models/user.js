@@ -46,7 +46,7 @@ var user = new mongoose.Schema({
 		type: String,
 		required: true,
 		bcrypt: true,
-		minlength: 6
+		minlength: 8
 	}
 }, {
 	timestamps: true
