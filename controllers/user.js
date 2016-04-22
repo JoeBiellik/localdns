@@ -52,6 +52,8 @@ users.getUser = function(username, password) {
 users.parseErrors = function(err) {
 	errors = {};
 
+	if (!err.errors) return errors;
+
 	if (err.errors.ip) {
 		errors.ip = 'Invalid IPv4 address';
 	}
@@ -314,7 +316,7 @@ users.status = function(req, res) {
 				path: '/',
 				agent: false,
 				headers: {
-					host: req.session.user.sub + '.' + config.domain					
+					host: req.session.user.sub + '.' + config.domain
 				}
 			}, (httpRes) => {
 				result.http = {
