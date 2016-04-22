@@ -37,35 +37,11 @@ div.card.m-x-1.m-b-3
   div.card-block
     h4.card-title.m-b-2.text-muted Settings
 
-    +edit-form('text', 'sub', 'Subdomain', (body && body.sub) ? body.sub : user.sub, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', '^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', 'autofocus', '.' + domain, errors.sub)
-    +edit-form('text', 'username', 'Username', (body && body.username) ? body.username : user.username, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash or underscore', '^[a-z0-9][a-z0-9_-]{0,62}$', null, null, errors.username)
+    +edit-form('text', 'sub', 'Subdomain', (body && body.sub) ? body.sub : user.sub, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', '^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', 'autofocus', '.' + domain, false, errors.sub)
+    +edit-form('text', 'username', 'Username', (body && body.username) ? body.username : user.username, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash or underscore', '^[a-z0-9][a-z0-9_-]{0,62}$', null, null, false, errors.username)
+    +edit-form('password', 'password', 'Password', '', null, null, null, null, true, errors.password)
 
-    form(method='post', action='/')
-      if errors && errors.password
-        div.form-group.row.has-danger
-          div.col-sm-9
-            input(type='password', placeholder='Password', name='password', required).form-control.form-control-danger
-            div.alert.alert-danger #{errors.password}
-      else
-        div.form-group.row
-          div.col-sm-9
-            input(type='password', placeholder='Password', name='password', required).form-control
-      
-      if errors && errors.password_confirm
-        div.form-group.row.m-b-0.has-danger
-          div.col-sm-9
-            input(type='password', placeholder='Password Confirm', name='password_confirm', required).form-control.form-control-danger
-            div.alert.alert-danger #{errors.password}
-          div.col-sm-3
-            button(type='submit').btn.btn-secondary.btn-block Change
-      else
-        div.form-group.row.m-b-0
-          div.col-sm-9
-            input(type='password', placeholder='Password Confirm', name='password_confirm', required).form-control
-          div.col-sm-3
-            button(type='submit').btn.btn-secondary.btn-block Change
-            
-script(src='https://code.jquery.com/jquery-2.2.2.min.js')
+script(src='https://code.jquery.com/jquery-2.2.3.min.js', integrity='sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=' crossorigin='anonymous')
 script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js')
 script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/js/bootstrap.min.js')
 script(src='/main.js')
