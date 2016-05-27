@@ -28,8 +28,11 @@ var server = dnsd.createServer(function(req, res) {
 
 	if (res.answer.length || question.type === 'SOA') return res.end();
 
+	var sub = question.name.substring(0, question.name.lastIndexOf('.' + config.domain));
+	if (sub.lastIndexOf('.') !== -1) sub = sub.substring(sub.lastIndexOf('.') + 1);
+
 	try {
-		User.findOne({ sub: question.name.substring(0, question.name.lastIndexOf('.' + config.domain)) }, function (err, doc) {
+		User.findOne({ sub: sub }, function (err, doc) {
 			if (!err && doc) {
 				if (question.type == 'A' || question.type == '*') {
 					res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
