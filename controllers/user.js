@@ -332,16 +332,16 @@ users.status = function(req, res) {
 					result: httpRes.statusCode
 				};
 
-				res.json(result);
-				return res.end();
+				if (res.headersSent) return;
+				return res.json(result).end();
 			}).on('error', () => {
-				res.json(result);
-				return res.end();
+				if (res.headersSent) return;
+				return res.json(result).end();
 			});
 
 			request.setTimeout(1000, () => {
-				res.json(result);
-				return res.end();
+				if (res.headersSent) return;
+				return res.json(result).end();
 			});
 		});
 	});
