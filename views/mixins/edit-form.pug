@@ -18,8 +18,9 @@ mixin edit-form(type, name, placeholder, value, title, pattern, autofocus, addon
           div.col-sm-3
             button(type='submit').btn.btn-secondary.btn-block Change
       if !error
-        div.col-sm-9(class=(addon ? 'input-group' : ''))
-          +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, null, addon, null)
+        div.col-sm-9
+          div.input-group
+            +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, null, addon, null)
         if !password
           div.col-sm-3
             button(type='submit').btn.btn-secondary.btn-block Change
