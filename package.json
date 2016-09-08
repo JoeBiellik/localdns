@@ -21,30 +21,9 @@
   "main": "server.js",
   "scripts": {
     "dns-server": "node dns-server.js",
-    "watch": "./node_modules/.bin/nodemon -L -e js,json -i ./public",
-    "watch dns-server": "./node_modules/.bin/nodemon -L -e js,json -i ./public dns-server.js",
-    "lint": "./node_modules/.bin/eslint . && ./node_modules/.bin/jade-lint ./views/"
-  },
-  "eslintConfig": {
-    "env": {
-      "node": true,
-      "es6": true
-    },
-    "extends": "eslint:recommended",
-    "rules": {
-      "indent": [
-        2,
-        "tab"
-      ],
-      "quotes": [
-        2,
-        "single",
-        "avoid-escape"
-      ],
-      "no-console": [
-        0
-      ]
-    }
+    "watch": "nodemon -L -e js,json -i ./public",
+    "watch dns-server": "nodemon -L -e js,json -i ./public dns-server.js",
+    "lint": "eslint . && pug-lint ./views"
   },
   "dependencies": {
     "body-parser": "^1.15.0",
@@ -57,16 +36,16 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "http-auth": "^2.2.9",
-    "jade": "^1.11.0",
     "jstransformer-marked": "^1.0.1",
     "mongoose": "^4.1.12",
     "mongoose-bcrypt": "^1.2.3",
     "mongoose-unique-validator": "^1.0.2",
-    "net-ping": "^1.2.0"
+    "net-ping": "^1.2.0",
+    "pug": "^2.0.0-beta6"
   },
   "devDependencies": {
-    "eslint": "^2.6.0",
-    "jade-lint": "^2.0.0",
-    "nodemon": "^1.7.2"
+    "eslint": "^3.4.0",
+    "nodemon": "^1.7.2",
+    "pug-lint": "^2.3.0"
   }
 }

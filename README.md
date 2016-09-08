@@ -3,7 +3,7 @@
 [![Release Version](https://img.shields.io/github/release/JoeBiellik/localdns.svg)](https://github.com/JoeBiellik/localdns/releases)
 [![Dependencies](https://img.shields.io/david/JoeBiellik/localdns.svg)](https://david-dm.org/JoeBiellik/localdns)
 
-Tiny [Node.js](https://nodejs.org/) dynamic DNS service built with [dnsd](https://www.npmjs.com/package/dnsd), [Express.js](http://expressjs.com/), [MongoDB](https://www.mongodb.org/), [Jade](http://jade-lang.com/) and [Bootstrap 4](http://v4-alpha.getbootstrap.com/).
+Tiny [Node.js](https://nodejs.org/) dynamic DNS service built with [dnsd](https://www.npmjs.com/package/dnsd), [Express.js](http://expressjs.com/), [MongoDB](https://www.mongodb.org/), [Pug](https://pugjs.org/) and [Bootstrap 4](http://v4-alpha.getbootstrap.com/).
 
 The app consists of two parts: a web frontend with registration, login and IP address mapping; and a tiny DNS server which serves records from a database.
 
