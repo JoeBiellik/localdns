@@ -6,6 +6,7 @@ require('./db')();
 
 var server = dnsd.createServer(function(req, res) {
 	var question = res.question && res.question[0];
+	question.name = question.name.toLowerCase() || '';
 
 	util.log('%s lookup for domain: %s', question.name, question.type);
 
