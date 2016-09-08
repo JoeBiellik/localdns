@@ -1,6 +1,6 @@
-/*global document $:true*/
+/* global $ */
 
-$(document).ready(function() {
+$(function() {
 	$('[data-toggle="tooltip"]').tooltip();
 
 	var ip = $('#ip').text();
