@@ -25,6 +25,6 @@ pages.logout = function(req, res) {
 
 pages.about = function(req, res) {
 	res.render('about', { title: 'About' });
-}
+};
 
 module.exports = pages;

@@ -1,4 +1,5 @@
 var config = require('config');
+var util = require('util');
 var dnsd = require('dnsd');
 var User = require('./models/user');
 require('./db')();
@@ -6,7 +7,7 @@ require('./db')();
 var server = dnsd.createServer(function(req, res) {
 	var question = res.question && res.question[0];
 
-	console.log('%s lookup for domain: %s', question.name, question.type);
+	util.log('%s lookup for domain: %s', question.name, question.type);
 
 	if (question.name !== config.domain && !question.name.endsWith('.' + config.domain)) {
 		res.responseCode = 5; // REFUSED
@@ -32,7 +33,7 @@ var server = dnsd.createServer(function(req, res) {
 	if (sub.lastIndexOf('.') !== -1) sub = sub.substring(sub.lastIndexOf('.') + 1);
 
 	try {
-		User.findOne({ sub: sub }, function (err, doc) {
+		User.findOne({ sub: sub }, function(err, doc) {
 			if (!err && doc) {
 				if (question.type == 'A' || question.type == '*') {
 					res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });

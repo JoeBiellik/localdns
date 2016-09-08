@@ -83,9 +83,9 @@ users.parseErrors = function(err) {
 	}
 
 	return errors;
-}
+};
 
-users.register = wrap(function*(req, res) {
+users.register = wrap(function* (req, res) {
 	try {
 		res.locals.body = {
 			username: req.body.username,
@@ -181,8 +181,8 @@ users.edit = wrap(function* (req, res) {
 });
 
 users.basicAuth = function(req, res) {
-	var basic = auth.basic({ realm: 'Login Required' }, function (username, password, callback) {
-		User.findOne({ username: username }, function (err, doc) {
+	var basic = auth.basic({ realm: 'Login Required' }, function(username, password, callback) {
+		User.findOne({ username: username }, function(err, doc) {
 			callback(!err && doc && doc.verifyPasswordSync(password));
 		});
 	});
@@ -196,13 +196,15 @@ users.basicAuth = function(req, res) {
 			return resolve(reqAuth.user);
 		});
 	});
-}
+};
 
 users.update = wrap(function* (req, res) {
+	var user = null;
+
 	if (!users.checkSession(req)) {
 		if (req.body.username && req.body.password) {
 			try {
-				var user = yield users.getUser(req.body.username, req.body.password);
+				user = yield users.getUser(req.body.username, req.body.password);
 
 				user.ip = req.body.ip || res.locals.ip;
 				user.save();
@@ -215,9 +217,9 @@ users.update = wrap(function* (req, res) {
 			}
 		} else {
 			try {
-				var user = yield users.basicAuth(req, res);
+				user = yield users.basicAuth(req, res);
 
-				User.findOne({ username: user }, function (err, doc) {
+				User.findOne({ username: user }, function(err, doc) {
 					doc.ip = req.body.ip || res.locals.ip;
 					try {
 						doc.save();
@@ -234,8 +236,9 @@ users.update = wrap(function* (req, res) {
 			}
 		}
 	} else {
-		var user = yield users.getUser(req, false);
+		user = yield users.getUser(req, false);
 		user.ip = req.body.ip || res.locals.ip;
+
 		try {
 			user.save();
 			users.setSession(req, user);
@@ -252,7 +255,7 @@ users.nic = wrap(function* (req, res) {
 		var user = yield users.basicAuth(req, res);
 		var ip = req.query.myip || res.locals.ip;
 
-		User.findOne({ username: user }, function (err, doc) {
+		User.findOne({ username: user }, function(err, doc) {
 			if (req.query && req.query.hostname) {
 				if (doc.sub + '.' + config.domain != req.query.hostname) {
 					res.send('nohost');
