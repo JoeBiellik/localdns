@@ -44,7 +44,7 @@
     "pug": "^2.0.0-beta6"
   },
   "devDependencies": {
-    "eslint": "^3.4.0",
+    "eslint": "^4.1.0",
     "nodemon": "^1.7.2",
     "pug-lint": "^2.3.0"
   }
