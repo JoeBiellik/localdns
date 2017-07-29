@@ -1,12 +1,12 @@
 include ../mixins/edit-form
 
-section.m-t-2.p-t-2.text-sm-center
+section.mt-5.pt-2.text-sm-center
   h3
-    a(href='http://#{user.sub}.#{domain}', target='_blank')#domain #{user.sub}.#{domain}
+    a(href='http://' + user.sub + '.' + domain, target='_blank')#domain #{user.sub}.#{domain}
     |  currently points to 
-    a(href='http://#{user.ip}', target='_blank')#ip #{user.ip}
+    a(href='http://' + user.ip, target='_blank')#ip #{user.ip}
 
-section.m-t-3.m-x-1.m-b-3
+section.mt-5.mx-3.mb-5
   form(method='post', action='/')
     if errors && errors.ip
       div.alert.alert-danger
@@ -23,7 +23,7 @@ section#status
     div.double-bounce1
     div.double-bounce2
 
-  article(style='display: none;')#results.p-x-1.m-b-3.card-group.text-sm-center
+  article(style='display: none;')#results.px-3.mb-5.card-group.text-sm-center
     div(data-toggle='tooltip' title="These results are from Google's public DNS service")#dns.card.card-inverse
       div.card-block
         h4.card-title DNS
@@ -37,15 +37,15 @@ section#status
         h4.card-title HTTP
         p.card-text
 
-div.card.m-x-1.m-b-3
+div.card.mx-3
   div.card-block
-    h4.card-title.m-b-2.text-muted Settings
+    h4.card-title.mb-4.text-muted Settings
 
     +edit-form('text', 'sub', 'Subdomain', (body && body.sub) ? body.sub : user.sub, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', '^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', 'autofocus', '.' + domain, false, errors.sub)
     +edit-form('text', 'username', 'Username', (body && body.username) ? body.username : user.username, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash or underscore', '^[a-z0-9][a-z0-9_-]{0,62}$', null, null, false, errors.username)
     +edit-form('password', 'password', 'Password', '', 'Minimum 8 characters', '^.{8,}$', null, null, true, errors.password)
 
-script(src='https://code.jquery.com/jquery-2.2.4.min.js', integrity='sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=' crossorigin='anonymous')
-script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js', integrity='sha256-/5pHDZh2fv1eZImyfiThtB5Ag4LqDjyittT7fLjdT/8=' crossorigin='anonymous')
-script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.4/js/bootstrap.min.js', integrity='sha256-XyTHD0vVOVZLq0ARVP6l1Y6eFUWG4U28R5v/UrRDYew=' crossorigin='anonymous')
+script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb' crossorigin='anonymous')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js', integrity='sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn' crossorigin='anonymous')
 script(src='/main.js')

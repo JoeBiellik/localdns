@@ -4,14 +4,25 @@ html {
 }
 
 body {
-	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	margin-bottom: 50px;
+}
+
+main {
+	margin-bottom: 6rem;
+}
+
+body, button, input, optgroup, select, textarea {
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 @media (min-width: 48em) {
 	.container {
-	max-width: 46rem;
+		max-width: 46rem;
 	}
+}
+
+.text-muted {
+    color: #818a91 !important;
 }
 
 header {
