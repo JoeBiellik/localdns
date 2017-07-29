@@ -1,11 +1,11 @@
-var config = require('config');
-var util = require('util');
-var dnsd = require('dnsd');
-var User = require('./models/user');
+const config = require('config');
+const util = require('util');
+const dnsd = require('dnsd');
+const User = require('./models/user');
 require('./db')();
 
-var server = dnsd.createServer(function(req, res) {
-	var question = res.question && res.question[0];
+const server = dnsd.createServer((req, res) => {
+	const question = res.question && res.question[0];
 	question.name = question.name.toLowerCase() || '';
 
 	util.log('%s lookup for domain: %s', question.name, question.type);
@@ -15,12 +15,12 @@ var server = dnsd.createServer(function(req, res) {
 		return res.end();
 	}
 
-	config.dns.records.forEach(function(record) {
+	config.dns.records.forEach((record) => {
 		if (record.name && record.type === 'NS') {
 			return;
 		}
 
-		var name = record.name ? record.name + '.' + config.domain : config.domain;
+		const name = record.name ? record.name + '.' + config.domain : config.domain;
 		if (name !== question.name) return;
 
 		if (question.type === '*' || record.type === question.type) {
@@ -30,11 +30,11 @@ var server = dnsd.createServer(function(req, res) {
 
 	if (res.answer.length || question.type === 'SOA') return res.end();
 
-	var sub = question.name.substring(0, question.name.lastIndexOf('.' + config.domain));
+	let sub = question.name.substring(0, question.name.lastIndexOf('.' + config.domain));
 	if (sub.lastIndexOf('.') !== -1) sub = sub.substring(sub.lastIndexOf('.') + 1);
 
 	try {
-		User.findOne({ sub: sub }, function(err, doc) {
+		User.findOne({ sub: sub }, (err, doc) => {
 			if (!err && doc) {
 				if (question.type == 'A' || question.type == '*') {
 					res.answer.push({ 'name': question.name, 'type': 'A', 'data': doc.ip });
@@ -51,4 +51,6 @@ var server = dnsd.createServer(function(req, res) {
 	}
 });
 
-server.zone(config.domain, 'ns1.' + config.domain, config.contact || 'contact@' + config.domain, 'now', '2h', '30m', '2w', '1m').listen(process.env.PORT || config.dns.port || 53, process.env.HOST || config.dns.host || '0.0.0.0');
+server
+	.zone(config.domain, 'ns1.' + config.domain, config.contact || 'contact@' + config.domain, 'now', '2h', '30m', '2w', '1m')
+	.listen(process.env.PORT || config.dns.port || 53, process.env.HOST || config.dns.host || '0.0.0.0');

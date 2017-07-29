@@ -1,7 +1,7 @@
 {
   "domain": "localdns.in",
   "port": 80,
-  "db": "db/dns",
+  "db": "mongodb://db/dns",
   "contact": "contact@localdns.in",
   "dns": {
     "records": [

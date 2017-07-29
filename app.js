@@ -1,12 +1,12 @@
-var express = require('express');
-var config = require('config');
-var wrap = require('co-express');
-var db = require('./db')();
-var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
-var app = express();
-var pages = require('./controllers/page');
-var users = require('./controllers/user');
+const express = require('express');
+const config = require('config');
+const wrap = require('co-express');
+const db = require('./db')();
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const app = express();
+const pages = require('./controllers/page');
+const users = require('./controllers/user');
 
 app.disable('x-powered-by');
 app.set('view engine', 'pug');
@@ -27,14 +27,13 @@ app.use(session({
 	store: new MongoStore({ mongooseConnection: db })
 }));
 
-app.use(wrap(function* (req, res, next) {
-	var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+app.use(wrap(async (req, res, next) => {
+	let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 	if (ip.startsWith('::ffff:')) ip = ip.substring(7);
 	res.locals.ip = ip;
 
 	try {
-		var user = yield users.checkSession(req);
-		users.setSession(req, user);
+		users.setSession(req, await users.checkSession(req));
 	} catch (err) {
 		users.setSession(req);
 	}

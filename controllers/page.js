@@ -1,4 +1,4 @@
-var pages = {};
+const pages = {};
 
 pages.home = function(req, res) {
 	res.render('index', { title: 'Dynamic DNS Service' });

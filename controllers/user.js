@@ -1,15 +1,15 @@
-var config = require('config');
-var wrap = require('co-express');
-var dns = require('dns');
-var http = require('http');
-var auth = require('http-auth');
-var ping = require ('net-ping');
-var User = require('../models/user');
-var pages = require('./page');
+const config = require('config');
+const wrap = require('co-express');
+const dns = require('dns');
+const http = require('http');
+const auth = require('http-auth');
+const ping = require ('net-ping');
+const User = require('../models/user');
+const pages = require('./page');
 
-var users = {};
+const users = {};
 
-users.setSession = function(req, user) {
+users.setSession = (req, user) => {
 	if (user) {
 		req.session.user = {
 			username: user.username,
@@ -21,7 +21,7 @@ users.setSession = function(req, user) {
 	}
 };
 
-users.checkSession = function(req) {
+users.checkSession = (req) => {
 	return new Promise((resolve, reject) => {
 		if (!req.session.user || !req.session.user.username) return reject();
 
@@ -35,7 +35,7 @@ users.checkSession = function(req) {
 	});
 };
 
-users.getUser = function(username, password) {
+users.getUser = (username, password) => {
 	return new Promise((resolve, reject) => {
 		if (!username || !password) return reject();
 
@@ -49,8 +49,8 @@ users.getUser = function(username, password) {
 	});
 };
 
-users.parseErrors = function(err) {
-	var errors = {};
+users.parseErrors = (err) => {
+	const errors = {};
 
 	if (!err.errors) return errors;
 
@@ -85,7 +85,7 @@ users.parseErrors = function(err) {
 	return errors;
 };
 
-users.register = wrap(function* (req, res) {
+users.register = wrap(async (req, res) => {
 	try {
 		res.locals.body = {
 			username: req.body.username,
@@ -104,14 +104,14 @@ users.register = wrap(function* (req, res) {
 			};
 		}
 
-		var user = new User({
+		const user = new User({
 			username: req.body.username,
 			sub: req.body.sub,
 			ip: res.locals.ip,
 			password: req.body.password
 		});
 
-		yield user.save();
+		await user.save();
 
 		users.setSession(req, user);
 
@@ -122,9 +122,9 @@ users.register = wrap(function* (req, res) {
 	}
 });
 
-users.login = wrap(function* (req, res) {
+users.login = wrap(async (req, res) => {
 	try {
-		var user = yield users.getUser(req.body.username, req.body.password);
+		const user = await users.getUser(req.body.username, req.body.password);
 
 		users.setSession(req, user);
 
@@ -135,13 +135,13 @@ users.login = wrap(function* (req, res) {
 	}
 });
 
-users.edit = wrap(function* (req, res) {
+users.edit = wrap(async (req, res) => {
 	if (!req.body) return res.redirect('/');
 
-	var user;
+	let user;
 
 	try {
-		user = yield users.checkSession(req);
+		user = await users.checkSession(req);
 	} catch (err) {
 		return res.redirect('/');
 	}
@@ -164,7 +164,7 @@ users.edit = wrap(function* (req, res) {
 		if (req.body.username && req.body.username != user.username) user.username = req.body.username;
 		if (req.body.password) user.password = req.body.password;
 
-		yield user.save();
+		await user.save();
 
 		users.setSession(req, user);
 
@@ -180,15 +180,15 @@ users.edit = wrap(function* (req, res) {
 	}
 });
 
-users.basicAuth = function(req, res) {
-	var basic = auth.basic({ realm: 'Login Required' }, function(username, password, callback) {
-		User.findOne({ username: username }, function(err, doc) {
+users.basicAuth = (req, res) => {
+	const basic = auth.basic({ realm: 'Login Required' }, (username, password, callback) => {
+		User.findOne({ username: username }, (err, doc) => {
 			callback(!err && doc && doc.verifyPasswordSync(password));
 		});
 	});
 
 	return new Promise((resolve, reject) => {
-		basic.check(req, res, function(reqAuth) {
+		basic.check(req, res, (reqAuth) => {
 			if (!reqAuth.user) {
 				return reject();
 			}
@@ -198,13 +198,13 @@ users.basicAuth = function(req, res) {
 	});
 };
 
-users.update = wrap(function* (req, res) {
-	var user = null;
+users.update = wrap(async (req, res) => {
+	let user = null;
 
 	if (!users.checkSession(req)) {
 		if (req.body.username && req.body.password) {
 			try {
-				user = yield users.getUser(req.body.username, req.body.password);
+				user = await users.getUser(req.body.username, req.body.password);
 
 				user.ip = req.body.ip || res.locals.ip;
 				user.save();
@@ -217,9 +217,9 @@ users.update = wrap(function* (req, res) {
 			}
 		} else {
 			try {
-				user = yield users.basicAuth(req, res);
+				user = await users.basicAuth(req, res);
 
-				User.findOne({ username: user }, function(err, doc) {
+				User.findOne({ username: user }, (err, doc) => {
 					doc.ip = req.body.ip || res.locals.ip;
 					try {
 						doc.save();
@@ -236,7 +236,7 @@ users.update = wrap(function* (req, res) {
 			}
 		}
 	} else {
-		user = yield users.getUser(req, false);
+		user = await users.getUser(req, false);
 		user.ip = req.body.ip || res.locals.ip;
 
 		try {
@@ -250,12 +250,12 @@ users.update = wrap(function* (req, res) {
 	}
 });
 
-users.nic = wrap(function* (req, res) {
+users.nic = wrap(async (req, res) => {
 	try {
-		var user = yield users.basicAuth(req, res);
-		var ip = req.query.myip || res.locals.ip;
+		const user = await users.basicAuth(req, res);
+		const ip = req.query.myip || res.locals.ip;
 
-		User.findOne({ username: user }, function(err, doc) {
+		User.findOne({ username: user }, (err, doc) => {
 			if (req.query && req.query.hostname) {
 				if (doc.sub + '.' + config.domain != req.query.hostname) {
 					res.send('nohost');
@@ -282,7 +282,7 @@ users.nic = wrap(function* (req, res) {
 	}
 });
 
-users.status = function(req, res) {
+users.status = (req, res) => {
 	res.set('Cache-Control', 'no-cache');
 
 	if (!users.checkSession(req)) {
@@ -290,7 +290,7 @@ users.status = function(req, res) {
 		return res.end();
 	}
 
-	var result = {
+	const result = {
 		dns: {
 			error: true
 		},
@@ -316,12 +316,12 @@ users.status = function(req, res) {
 			};
 		}
 
-		ping.createSession({ retries: 0, timeout: 1000 }).pingHost(req.session.user.ip, function(error) {
+		ping.createSession({ retries: 0, timeout: 1000 }).pingHost(req.session.user.ip, (error) => {
 			if (!error) {
 				result.ping.error = false;
 			}
 
-			var request = http.get({
+			const request = http.get({
 				hostname: req.session.user.ip,
 				port: 80,
 				path: '/',

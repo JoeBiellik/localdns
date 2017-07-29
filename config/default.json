@@ -1,7 +1,7 @@
 {
   "domain": "localdns.local",
   "port": 80,
-  "db": "db/dev",
+  "db": "mongodb://db/dev",
   "contact": "root@localhost",
   "dns": {
     "host": "0.0.0.0",
