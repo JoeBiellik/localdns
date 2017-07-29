@@ -8,7 +8,7 @@ const server = dnsd.createServer((req, res) => {
 	const question = res.question && res.question[0];
 	question.name = question.name.toLowerCase() || '';
 
-	util.log('%s lookup for domain: %s', question.name, question.type);
+	util.log('[%s] %s request', question.name, question.type);
 
 	if (question.name !== config.domain && !question.name.endsWith('.' + config.domain)) {
 		res.responseCode = 5; // REFUSED
