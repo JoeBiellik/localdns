@@ -1,6 +1,6 @@
 {
   "name": "localdns",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Dynamic DNS service",
   "license": "MIT",
   "repository": "JoeBiellik/localdns",
