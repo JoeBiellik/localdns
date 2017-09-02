@@ -1,6 +1,6 @@
 mixin textbox(type, name, placeholder, value, title, pattern, required, autofocus, style, addon, error)
-  input(type=type, name=name, placeholder=placeholder, value=value, title=title, pattern=pattern, required=required, autofocus=autofocus, class=style).form-control
+  input.form-control(type=type, name=name, placeholder=placeholder, value=value, title=title, pattern=pattern, required=required, autofocus=autofocus, class=style)
   if addon
     span.input-group-addon #{addon}
   if error
-    div.alert.alert-danger #{error}
+    .alert.alert-danger #{error}

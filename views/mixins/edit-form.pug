@@ -2,31 +2,31 @@ include textbox
 
 mixin edit-form(type, name, placeholder, value, title, pattern, autofocus, addon, password, error)
   form(method='post', action='/')
-    div.form-group.row(class=(error ? 'has-danger' : ''))
+    .form-group.row(class=(error ? 'has-danger' : ''))
       if error && addon
-        div.col-sm-9
-          div.input-group
+        .col-sm-9
+          .input-group
             +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, null, addon, null)
-          div.alert.alert-danger #{error}
+          .alert.alert-danger #{error}
         if !password
-          div.col-sm-3
-            button(type='submit').btn.btn-secondary.btn-block Change
+          .col-sm-3
+            button.btn.btn-outline-secondary.btn-block.text-dark(type='submit') Change
       if error && !addon
-        div.col-sm-9
+        .col-sm-9
           +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, null, null, error)
         if !password
-          div.col-sm-3
-            button(type='submit').btn.btn-secondary.btn-block Change
+          .col-sm-3
+            button.btn.btn-outline-secondary.btn-block.text-dark(type='submit') Change
       if !error
-        div.col-sm-9
-          div.input-group
+        .col-sm-9
+          .input-group
             +textbox(type, name, placeholder, value, title, pattern, 'required', autofocus, null, addon, null)
         if !password
-          div.col-sm-3
-            button(type='submit').btn.btn-secondary.btn-block Change
+          .col-sm-3
+            button.btn.btn-outline-secondary.btn-block.text-dark(type='submit') Change
     if password
-      div.form-group.row.mb-0
-        div.col-sm-9
+      .form-group.row.mb-0
+        .col-sm-9
           +textbox(type, 'password_confirm', 'Confirm', '', title, pattern, 'required', null, null, null, null)
-        div.col-sm-3
-          button(type='submit').btn.btn-secondary.btn-block Change
+        .col-sm-3
+          button.btn.btn-outline-secondary.btn-block.text-dark(type='submit') Change

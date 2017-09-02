@@ -2,21 +2,21 @@ extends layout
 
 block nav
   li.nav-item
-    a(href='/').nav-link Home
+    a.nav-link(href='/') Home
   li.nav-item
-    a(href='/register').nav-link Register
+    a.nav-link(href='/register') Register
   li.nav-item
-    a(href='/about').nav-link About
+    a.nav-link(href='/about') About
 
 include ./mixins/register-textbox
 
 block content
   section.jumbotron.p-5
-    form(method='post', action='/login').text-md-left
+    form.text-md-left(method='post', action='/login')
       if errors && errors._top
-        div.alert.alert-danger #{errors._top}
+        .alert.alert-danger #{errors._top}
           
       +register-textbox('text', 'username', 'Username', (body && body.username), '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash or underscore', '^[a-z0-9][a-z0-9_-]{0,62}$', 'autofocus', false, null)
       +register-textbox('password', 'password', 'Password', null, 'Minimum 8 characters', '^.{8,}$', null, false, null)
 
-      button(type='submit').btn.btn-lg.btn-primary.btn-block Login
+      button.btn.btn-lg.btn-primary.btn-block(type='submit') Login

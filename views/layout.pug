@@ -2,32 +2,32 @@ doctype html
 html(lang='en')
   head
     meta(charset='utf-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
     title #{domain} - #{title}
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css', integrity='sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ', crossorigin='anonymous')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M', crossorigin='anonymous')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans:400,300')
     link(rel='stylesheet', href='/style.css')
 
     block head
 
   body
-    a(href='https://github.com/JoeBiellik/localdns', target='_blank', style='position: absolute; top: 0; right: 0; border: 0;').hidden-md-down
+    a.d-none.d-lg-block(href='https://github.com/JoeBiellik/localdns', target='_blank', aria-hidden='true', style='position: absolute; top: 0; right: 0;')
       img(src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png', alt='Fork me on GitHub')
 
-    main.container.mt-4.mx-6
+    main.container.mt-4
       header.mb-4
         nav
           ul.nav.nav-pills.float-right
             block nav
 
-        h1.text-muted.mb-4 #{domain}
+        h1.mb-4.text-muted #{domain}
 
       block content
 
     footer
       section.container.text-muted
-        div.row
-          div.col-sm-6
+        .row
+          .col-6
             p #{domain}
-          div.col-sm-6
-            p.text-sm-right Your IP is #{ip}
+          .col-6
+            p.text-right Your IP is #{ip}
