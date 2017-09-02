@@ -3,11 +3,11 @@
 [![Release Version](https://img.shields.io/github/release/JoeBiellik/localdns.svg)](https://github.com/JoeBiellik/localdns/releases)
 [![Dependencies](https://img.shields.io/david/JoeBiellik/localdns.svg)](https://david-dm.org/JoeBiellik/localdns)
 
-Tiny [Node.js](https://nodejs.org/) dynamic DNS service built with [dnsd](https://www.npmjs.com/package/dnsd), [Express.js](http://expressjs.com/), [MongoDB](https://www.mongodb.org/), [Pug](https://pugjs.org/) and [Bootstrap 4](http://v4-alpha.getbootstrap.com/).
+Tiny [Node.js](https://nodejs.org/) dynamic DNS service built with [dnsd](https://www.npmjs.com/package/dnsd), [Express.js](https://expressjs.com/), [MongoDB](https://www.mongodb.org/), [Pug](https://pugjs.org/) and [Bootstrap](https://getbootstrap.com/).
 
 The app consists of two parts: a web frontend with registration, login and IP address mapping; and a tiny DNS server which serves records from a database.
 
-> Use it for free at [localdns.in](http://localdns.in/)
+> Use it for free at [localdns.in](https://localdns.in/)
 
 ## Usage
 You can simply login to the website and manage your subdomain and IP address there or you can use the simple HTTP API to update your IP with a script or dynamic DNS client.
