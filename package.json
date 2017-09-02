@@ -1,6 +1,6 @@
 {
   "name": "localdns",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Dynamic DNS service",
   "license": "MIT",
   "repository": "JoeBiellik/localdns",
@@ -26,26 +26,26 @@
     "lint": "eslint . && pug-lint ./views"
   },
   "dependencies": {
-    "body-parser": "^1.15.0",
+    "body-parser": "^1.17.2",
     "cidr_match": "0.0.7",
     "co-express": "^2.0.0",
-    "compression": "^1.6.1",
-    "config": "^1.16.0",
-    "connect-mongo": "^1.1.0",
+    "compression": "^1.7.0",
+    "config": "^1.26.2",
+    "connect-mongo": "^1.3.2",
     "dnsd": "^0.9.6",
-    "express": "^4.13.4",
-    "express-session": "^1.13.0",
-    "http-auth": "^3.1.0",
-    "jstransformer-marked": "^1.0.1",
-    "mongoose": "^4.1.12",
-    "mongoose-bcrypt": "^1.2.3",
-    "mongoose-unique-validator": "^1.0.2",
-    "net-ping": "^1.2.0",
-    "pug": "^2.0.0-rc.2"
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "http-auth": "^3.2.3",
+    "jstransformer-marked": "^1.0.2",
+    "mongoose": "^4.11.9",
+    "mongoose-bcrypt": "^1.5.0",
+    "mongoose-unique-validator": "^1.0.5",
+    "net-ping": "^1.2.1",
+    "pug": "^2.0.0-rc.3"
   },
   "devDependencies": {
-    "eslint": "^4.3.0",
-    "nodemon": "^1.7.2",
-    "pug-lint": "^2.3.0"
+    "eslint": "^4.6.0",
+    "nodemon": "^1.11.0",
+    "pug-lint": "^2.4.0"
   }
 }
