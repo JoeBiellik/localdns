@@ -8,9 +8,7 @@ module.exports = () => {
 	mongoose.connection.once('open', util.log.bind(util, 'MongoDB connection open'));
 	mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-	mongoose.connect(config.db, {
-		useMongoClient: true
-	});
+	mongoose.connect(config.db);
 
 	return mongoose.connection;
 };
