@@ -53,7 +53,7 @@ footer {
 	border-style: solid;
 	border-width: 1px 1px 0 1px;
 }
-.form-group.has-danger .input-group-addon {
+.form-group.has-danger .input-group-append .input-group-text {
 	border-bottom-right-radius: 0;
 	border-style: solid;
 	border-width: 1px 1px 0 0;
@@ -78,7 +78,7 @@ footer {
 	background-color: #d9534f !important;
 }
 
-.input-group-addon {
+.input-group-text {
 	background-color: white;
 }
 
