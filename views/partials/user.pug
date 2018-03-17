@@ -44,6 +44,21 @@ section#status
     +edit-form('text', 'sub', 'Subdomain', (body && body.sub) ? body.sub : user.sub, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash', '^[a-z0-9_][a-z0-9_-]{0,61}[a-z0-9_]$', 'autofocus', '.' + domain, false, errors.sub)
     +edit-form('text', 'username', 'Username', (body && body.username) ? body.username : user.username, '2 to 63 characters; lowercase letters, numbers, dashes (-) and underscores (_). May not start with a dash or underscore', '^[a-z0-9][a-z0-9_-]{0,62}$', null, null, false, errors.username)
     +edit-form('password', 'password', 'Password', '', 'Minimum 8 characters', '^.{8,}$', null, null, true, errors.password)
+    button.btn.btn-outline-danger.mt-3.float-right(data-toggle='modal', data-target='#deleteModal') Delete Account
+    
+#deleteModal.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
+  .modal-dialog.modal-dialog-centered(role='document')
+    .modal-content
+      .modal-header
+        h5.modal-title Delete Account
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+      .modal-body
+        p Are you sure you want to delete your account?
+        p This will remove all of your DNS records and account details and cannot be undone.
+      .modal-footer
+        button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+        a#delete.btn.btn-danger(href='/delete') Delete Account
 
 script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
 script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous')

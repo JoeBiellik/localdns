@@ -53,6 +53,7 @@ app.post('/register', users.register);
 app.get('/login', pages.login);
 app.post('/login', users.login);
 app.get('/logout', pages.logout);
+app.get('/delete', users.delete);
 app.get('/update', users.update);
 app.post('/update', users.update);
 app.get('/nic/update', users.nic);

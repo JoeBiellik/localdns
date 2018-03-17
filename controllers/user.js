@@ -180,6 +180,21 @@ users.edit = wrap(async (req, res) => {
 	}
 });
 
+users.delete = wrap(async (req, res) => {
+	let user;
+
+	try {
+		user = await users.checkSession(req);
+	} catch (err) {
+		return res.redirect('/');
+	}
+
+	user.remove();
+	delete req.session;
+
+	return res.redirect('/');
+});
+
 users.basicAuth = (req, res) => {
 	const basic = auth.basic({ realm: 'Login Required' }, (username, password, callback) => {
 		User.findOne({ username: username }, (err, doc) => {
