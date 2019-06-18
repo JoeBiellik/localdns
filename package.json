@@ -41,7 +41,7 @@
     "mongoose-bcrypt": "^1.5.0",
     "mongoose-unique-validator": "^2.0.0",
     "net-ping": "^1.2.1",
-    "pug": "^2.0.1"
+    "pug": "^2.0.4"
   },
   "devDependencies": {
     "eslint": "^5.0.0",
