@@ -37,7 +37,7 @@
     "express-session": "^1.15.6",
     "http-auth": "^3.2.3",
     "jstransformer-marked": "^1.0.3",
-    "mongoose": "^5.0.10",
+    "mongoose": "^5.6.9",
     "mongoose-bcrypt": "^1.5.0",
     "mongoose-unique-validator": "^2.0.0",
     "net-ping": "^1.2.1",
