@@ -35,7 +35,7 @@
     "dnsd": "^0.9.6",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "http-auth": "^3.2.3",
+    "http-auth": "^4.1.0",
     "jstransformer-marked": "^1.0.3",
     "mongoose": "^5.0.10",
     "mongoose-bcrypt": "^1.5.0",
