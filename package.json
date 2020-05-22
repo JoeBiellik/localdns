@@ -38,7 +38,7 @@
     "http-auth": "^3.2.3",
     "jstransformer-marked": "^1.0.3",
     "mongoose": "^5.0.10",
-    "mongoose-bcrypt": "^1.5.0",
+    "mongoose-bcrypt": "^1.8.0",
     "mongoose-unique-validator": "^2.0.0",
     "net-ping": "^1.2.1",
     "pug": "^2.0.1"
