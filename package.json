@@ -33,7 +33,7 @@
     "config": "^3.0.0",
     "connect-mongo": "^2.0.0",
     "dnsd": "^0.9.6",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "express-session": "^1.15.6",
     "http-auth": "^3.2.3",
     "jstransformer-marked": "^1.0.3",
